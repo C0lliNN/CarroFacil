@@ -1,4 +1,4 @@
-package com.raphaelcollin.usermanagement.infrastructure;
+package com.raphaelcollin.usermanagement.infrastructure.persistence;
 
 import com.raphaelcollin.usermanagement.core.User;
 import com.raphaelcollin.usermanagement.core.UserRepository;
@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -45,6 +46,7 @@ public class DynamoDBUserRepository implements UserRepository {
 
     @Override
     public User save(User user) {
+        user.setId(UUID.randomUUID().toString());
         PutItemRequest request = PutItemRequest.builder()
                 .tableName(tableName)
                 .item(Map.of(
