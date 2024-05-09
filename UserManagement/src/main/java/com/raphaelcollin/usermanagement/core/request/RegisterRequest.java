@@ -20,6 +20,6 @@ public record RegisterRequest(
         String password) {
 
     public User toUser() {
-        return new User(null, name, email, password);
+        return new User(null, name, User.Type.CUSTOMER, email, password);
     }
 }

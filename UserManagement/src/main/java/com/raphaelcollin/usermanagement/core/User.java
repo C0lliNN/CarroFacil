@@ -3,15 +3,17 @@ package com.raphaelcollin.usermanagement.core;
 public class User {
     private String id;
     private String name;
+    private Type type;
     private String email;
     private String password;
 
     public User() {
     }
 
-    public User(String id, String name, String email, String password) {
+    public User(String id, String name, Type type, String email, String password) {
         this.id = id;
         this.name = name;
+        this.type = type;
         this.email = email;
         this.password = password;
     }
@@ -22,6 +24,10 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     public String getEmail() {
@@ -38,5 +44,10 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public enum Type {
+        EMPLOYEE,
+        CUSTOMER
     }
 }

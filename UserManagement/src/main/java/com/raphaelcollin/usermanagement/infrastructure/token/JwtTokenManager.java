@@ -29,6 +29,7 @@ public class JwtTokenManager implements TokenGenerator, TokenExtractor {
 
         claims.put("id", user.getId());
         claims.put("name", user.getName());
+        claims.put("type", user.getType().name());
         claims.put("email", user.getEmail());
 
         return Jwts
@@ -51,8 +52,9 @@ public class JwtTokenManager implements TokenGenerator, TokenExtractor {
         Claims claims = (Claims) jwt.getBody();
         String id = claims.get("id", String.class);
         String name = claims.get("name", String.class);
+        String type = claims.get("type", String.class);
         String email = claims.get("email", String.class);
 
-        return new User(id, name, email, null);
+        return new User(id, name, User.Type.valueOf(type), email, null);
     }
 }

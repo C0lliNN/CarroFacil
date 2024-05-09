@@ -37,6 +37,7 @@ public class DynamoDBUserRepository implements UserRepository {
             return Optional.of(new User(
                     item.get("id").s(),
                     item.get("name").s(),
+                    User.Type.valueOf(item.get("type").s().toUpperCase()),
                     item.get("email").s(),
                     item.get("password").s()
             ));
@@ -51,6 +52,7 @@ public class DynamoDBUserRepository implements UserRepository {
                 .item(Map.of(
                         "id", AttributeValue.builder().s(user.getId()).build(),
                         "name", AttributeValue.builder().s(user.getName()).build(),
+                        "type", AttributeValue.builder().s(user.getType().name()).build(),
                         "email", AttributeValue.builder().s(user.getEmail()).build(),
                         "password", AttributeValue.builder().s(user.getPassword()).build()
                 ))
