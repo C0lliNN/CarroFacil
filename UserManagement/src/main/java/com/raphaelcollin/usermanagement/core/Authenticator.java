@@ -1,5 +1,6 @@
 package com.raphaelcollin.usermanagement.core;
 
+import com.raphaelcollin.usermanagement.core.exception.DuplicateEmailException;
 import com.raphaelcollin.usermanagement.core.exception.EmailNotFoundException;
 import com.raphaelcollin.usermanagement.core.exception.IncorrectPasswordException;
 import com.raphaelcollin.usermanagement.core.request.LoginRequest;
@@ -16,8 +17,7 @@ public class Authenticator {
     private final TokenGenerator tokenGenerator;
 
     public UserResponse login(LoginRequest request) {
-        User user = repository.findByEmail(request.email())
-                .orElseThrow(() -> new EmailNotFoundException("The email '%s' could not be found.", request.email()));
+        User user = repository.findByEmail(request.email()).orElseThrow(() -> new EmailNotFoundException("The email '%s' could not be found.", request.email()));
 
         if (!passwordEncoder.comparePasswordAndHash(request.password(), user.getPassword())) {
             throw new IncorrectPasswordException("The provided password is incorrect.");
@@ -28,6 +28,10 @@ public class Authenticator {
 
     public UserResponse register(RegisterRequest request) {
         User user = request.toUser();
+
+        repository.findByEmail(user.getEmail()).ifPresent(existingUser -> {
+            throw new DuplicateEmailException("The email '%s' is already in use.".formatted(existingUser.getEmail()));
+        });
 
         user.setPassword(passwordEncoder.hashPassword(user.getPassword()));
         user = repository.save(user);

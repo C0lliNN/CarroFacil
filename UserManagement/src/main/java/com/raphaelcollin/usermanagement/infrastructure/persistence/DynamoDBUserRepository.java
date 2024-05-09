@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
-import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,16 +22,18 @@ public class DynamoDBUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        GetItemRequest request = GetItemRequest.builder()
+        QueryRequest request = QueryRequest.builder()
                 .tableName(tableName)
-                .key(Map.of("email", AttributeValue.builder().s(email).build()))
+                .indexName("emailIndex")
+                .keyConditionExpression("email = :email")
+                .expressionAttributeValues(Map.of(":email", AttributeValue.builder().s(email).build()))
                 .build();
 
-        GetItemResponse response = client.getItem(request);
-        if (!response.hasItem()) {
+        QueryResponse response = client.query(request);
+        if (response == null || response.items().isEmpty()) {
             return Optional.empty();
         } else {
-            Map<String, AttributeValue> item = response.item();
+            Map<String, AttributeValue> item = response.items().get(0);
             return Optional.of(new User(
                     item.get("id").s(),
                     item.get("name").s(),
