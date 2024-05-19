@@ -1,5 +1,8 @@
 package com.raphaelcollin.usermanagement.core;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class User {
     private String id;
     private String name;
