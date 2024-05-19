@@ -1,8 +1,8 @@
 package com.raphaelcollin.usermanagement.infrastructure.token;
 
+import com.raphaelcollin.usermanagement.core.TokenGenerator;
 import com.raphaelcollin.usermanagement.core.User;
 import com.raphaelcollin.usermanagement.core.exception.InvalidTokenException;
-import com.raphaelcollin.usermanagement.core.TokenGenerator;
 import com.raphaelcollin.usermanagement.infrastructure.web.TokenExtractor;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +44,11 @@ public class JwtTokenManager implements TokenGenerator, TokenExtractor {
     public User extractUserFromToken(final String token) {
         Jwt jwt;
         try {
-            jwt = Jwts.parser().build().parseSignedClaims(token, secret.getBytes());
+            jwt = Jwts
+                    .parser()
+                    .setSigningKey(secret.getBytes())
+                    .build()
+                    .parse(token);
         } catch (JwtException e) {
             throw new InvalidTokenException(e.getMessage());
         }

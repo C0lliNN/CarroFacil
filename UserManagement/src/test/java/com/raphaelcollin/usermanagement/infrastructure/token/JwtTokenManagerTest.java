@@ -3,10 +3,8 @@ package com.raphaelcollin.usermanagement.infrastructure.token;
 import com.raphaelcollin.usermanagement.core.User;
 import org.junit.jupiter.api.Test;
 
-import java.security.SecureRandom;
-import java.util.Base64;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class JwtTokenManagerTest {
 
@@ -22,6 +20,7 @@ class JwtTokenManagerTest {
 
         var user = new User(id, name, User.Type.valueOf(type), email, null);
         String token = jwtTokenManager.generateTokenForUser(user);
+        System.out.println(token);
         var extractedUser = jwtTokenManager.extractUserFromToken(token);
 
         assertFalse(token.isEmpty());
