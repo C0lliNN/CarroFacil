@@ -88,13 +88,16 @@ class JWTAuthorizationFilterTest {
         @Test
         @DisplayName("when Authorization header is properly formatted, then it should not throw any exception")
         void whenAuthorizationHeaderIsProperlyFormatted_shouldNotThrowAnyException() {
-            User user = new User(
-                    "1",
-                    "username",
-                    User.Type.CUSTOMER,
-                    "email",
-                    "password"
-            );
+            User user = User.builder()
+                    .id("1")
+                    .name("username")
+                    .type(User.Type.CUSTOMER)
+                    .email("email")
+                    .password("password")
+                    .build();
+
+            when(request.getHeader("Authorization")).thenReturn("Bearer token");
+            when(extractor.extractUserFromToken("token")).thenReturn(user);
 
             when(request.getHeader("Authorization")).thenReturn("Bearer token");
             when(extractor.extractUserFromToken("token")).thenReturn(user);

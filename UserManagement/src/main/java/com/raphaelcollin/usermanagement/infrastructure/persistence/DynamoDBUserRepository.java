@@ -39,7 +39,8 @@ public class DynamoDBUserRepository implements UserRepository {
                     item.get("name").s(),
                     User.Type.valueOf(item.get("type").s().toUpperCase()),
                     item.get("email").s(),
-                    item.get("password").s()
+                    item.get("password").s(),
+                    item.get("bookingsCount") == null ? 0 : Integer.parseInt(item.get("bookingsCount").n())
             ));
         }
     }

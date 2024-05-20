@@ -18,9 +18,14 @@ class JwtTokenManagerTest {
         String email = "email";
         String type = "CUSTOMER";
 
-        var user = new User(id, name, User.Type.valueOf(type), email, null);
+        var user = User.builder()
+                .id(id)
+                .name(name)
+                .type(User.Type.valueOf(type))
+                .email(email)
+                .build();
+
         String token = jwtTokenManager.generateTokenForUser(user);
-        System.out.println(token);
         var extractedUser = jwtTokenManager.extractUserFromToken(token);
 
         assertFalse(token.isEmpty());

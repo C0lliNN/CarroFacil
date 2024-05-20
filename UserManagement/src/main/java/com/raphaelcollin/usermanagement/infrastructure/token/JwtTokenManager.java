@@ -59,6 +59,11 @@ public class JwtTokenManager implements TokenGenerator, TokenExtractor {
         String type = claims.get("type", String.class);
         String email = claims.get("email", String.class);
 
-        return new User(id, name, User.Type.valueOf(type), email, null);
+        return User.builder().
+                id(id).
+                name(name).
+                type(User.Type.valueOf(type)).
+                email(email).
+                build();
     }
 }

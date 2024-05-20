@@ -72,13 +72,12 @@ class AuthControllerTest extends AbstractE2ETest {
                 .provisionedThroughput(ProvisionedThroughput.builder().readCapacityUnits(1L).writeCapacityUnits(1L).build())
         );
 
-        user = new User(
-                "id",
-                NAME,
-                User.Type.CUSTOMER,
-                EMAIL,
-                passwordEncoder.hashPassword(PASSWORD)
-        );
+        user = User.builder()
+                .name(NAME)
+                .type(User.Type.CUSTOMER)
+                .email(EMAIL)
+                .password(passwordEncoder.hashPassword(PASSWORD))
+                .build();
     }
 
     @AfterEach
@@ -367,13 +366,13 @@ class AuthControllerTest extends AbstractE2ETest {
         @Test
         @DisplayName("when called with existing email, then it should return 409 error")
         void whenCalledWithExistingEmail_shouldReturn409Error() throws Exception {
-            User user = new User(
-                    "id",
-                    NAME,
-                    User.Type.CUSTOMER,
-                    EMAIL,
-                    PASSWORD
-            );
+            User user = User.builder()
+                    .name(NAME)
+                    .type(User.Type.CUSTOMER)
+                    .email(EMAIL)
+                    .password(PASSWORD)
+                    .build();
+
             repository.save(user);
 
             RegisterRequest payload = new RegisterRequest(

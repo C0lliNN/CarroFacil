@@ -65,7 +65,14 @@ class AuthenticatorTest {
         @DisplayName("when password is incorrect, then it should throw an IncorrectPasswordException")
         void whenPasswordIsIncorrect_shouldThrowAnIncorrectPasswordException() {
             LoginRequest request = new LoginRequest("some-email", "some-password");
-            User user = new User("some-id", "some-name", User.Type.CUSTOMER, request.email(), "some-hashed-password");
+
+            User user = User.builder()
+                    .id("some-id")
+                    .name("some-name")
+                    .type(User.Type.CUSTOMER)
+                    .email(request.email())
+                    .password("some-hashed-password")
+                    .build();
 
             when(repository.findByEmail(request.email())).thenReturn(Optional.of(user));
             when(passwordEncoder.comparePasswordAndHash(request.password(), user.getPassword())).thenReturn(false);
@@ -86,7 +93,14 @@ class AuthenticatorTest {
         @DisplayName("when password is correct, then it should return a UserResponse")
         void whenPasswordIsCorrect_shouldReturnAUserResponse() {
             LoginRequest request = new LoginRequest("some-email", "some-password");
-            User user = new User("some-id", "some-name", User.Type.CUSTOMER, request.email(), "some-hashed-password");
+            User user = User.builder().
+                    id("some-id")
+                    .name("some-name")
+                    .type(User.Type.CUSTOMER)
+                    .email(request.email())
+                    .password("some-hashed-password")
+                    .build();
+
             String token = "some token";
 
             when(repository.findByEmail(request.email())).thenReturn(Optional.of(user));
@@ -114,7 +128,13 @@ class AuthenticatorTest {
         @DisplayName("when called and the email is already in use, then it should throw a DuplicateEmailException")
         void whenCalledAndTheEmailIsAlreadyInUse_shouldThrowADuplicateEmailException() {
             RegisterRequest request = new RegisterRequest("some-name", "some-email", "some-password");
-            User existingUser = new User("some-id", "some-name", User.Type.CUSTOMER, request.email(), "some-hashed-password");
+            User existingUser = User.builder()
+                    .id("some-id")
+                    .name("some-name")
+                    .type(User.Type.CUSTOMER)
+                    .email(request.email())
+                    .password("some-hashed-password")
+                    .build();
 
             when(repository.findByEmail(request.email())).thenReturn(Optional.of(existingUser));
 

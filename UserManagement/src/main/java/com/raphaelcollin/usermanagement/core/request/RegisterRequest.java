@@ -20,6 +20,11 @@ public record RegisterRequest(
         String password) {
 
     public User toUser() {
-        return new User(null, name, User.Type.CUSTOMER, email, password);
+        return User.builder()
+                .name(name)
+                .email(email)
+                .type(User.Type.CUSTOMER)
+                .password(password)
+                .build();
     }
 }
