@@ -6,15 +6,11 @@ import com.raphaelcollin.usermanagement.core.User;
 import com.raphaelcollin.usermanagement.core.UserRepository;
 import com.raphaelcollin.usermanagement.core.request.LoginRequest;
 import com.raphaelcollin.usermanagement.core.request.RegisterRequest;
+import com.raphaelcollin.usermanagement.infrastructure.IntegrationTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,16 +19,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-class AuthControllerTest extends AbstractE2ETest {
+class AuthControllerTest extends IntegrationTest {
     private static final String BASE_URL = "/auth";
     private final String NAME = "Raphael";
     private final String EMAIL = "test_auth2@test.com";
     private final String PASSWORD = "password";
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -43,34 +34,11 @@ class AuthControllerTest extends AbstractE2ETest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private DynamoDbClient client;
-
     private User user;
 
     @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        client.createTable(r -> r.tableName("users")
-                .attributeDefinitions(
-                        AttributeDefinition.builder().attributeName("id").attributeType("S").build(),
-                        AttributeDefinition.builder().attributeName("email").attributeType("S").build()
-                )
-                .keySchema(
-                        KeySchemaElement.builder().attributeName("id").keyType(KeyType.HASH).build()
-                )
-                .globalSecondaryIndexes(
-                        GlobalSecondaryIndex.builder()
-                                .indexName("emailIndex")
-                                .keySchema(
-                                        KeySchemaElement.builder().attributeName("email").keyType(KeyType.HASH).build()
-                                )
-                                .projection(Projection.builder().projectionType(ProjectionType.ALL).build())
-                                .provisionedThroughput(ProvisionedThroughput.builder().readCapacityUnits(1L).writeCapacityUnits(1L).build())
-                                .build()
-                )
-                .provisionedThroughput(ProvisionedThroughput.builder().readCapacityUnits(1L).writeCapacityUnits(1L).build())
-        );
+    protected void setUp() {
+        super.setUp();
 
         user = User.builder()
                 .name(NAME)
@@ -78,11 +46,6 @@ class AuthControllerTest extends AbstractE2ETest {
                 .email(EMAIL)
                 .password(passwordEncoder.hashPassword(PASSWORD))
                 .build();
-    }
-
-    @AfterEach
-    void tearDown() {
-        client.deleteTable(r -> r.tableName("users"));
     }
 
     @Nested
