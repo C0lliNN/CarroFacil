@@ -26,7 +26,7 @@ class WebSecurityConfig {
         http.addFilterAfter(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeHttpRequests(request -> {
-            request.requestMatchers("/v3/api-docs/**", "/docs/**", "/swagger-ui/**", "/auth/**").permitAll();
+            request.requestMatchers("/v3/api-docs/**", "/docs/**", "/swagger-ui/**", "/auth/**", "/actuator/**").permitAll();
             request.anyRequest().authenticated();
         });
 

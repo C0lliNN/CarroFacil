@@ -1,0 +1,16 @@
+docker run -p 8000:8000 \
+  --network host \
+  -e AWS_ACCESS_KEY_ID=access_key \
+  -e AWS_SECRET_ACCESS_KEY=secret_key \
+  -e AWS_REGION=us-east-1 \
+  -e DYNAMODB_TABLE_NAME=users \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -e SPRING_CLOUD_AWS_CREDENTIALS_ACCESS_KEY=access_key \
+  -e SPRING_CLOUD_AWS_CREDENTIALS_SECRET_KEY=secret_key \
+  -e SPRING_CLOUD_AWS_DYNAMODB_ENDPOINT=http://localhost:4566 \
+  -e SPRING_CLOUD_AWS_DYNAMODB_REGION=us-east-1 \
+  -e SPRING_CLOUD_AWS_SQS_ENDPOINT=http://localhost:4566 \
+  -e AWS_QUEUES_BOOKINGS=bookings \
+  -e JWT_SECRET=qKzO4DG1pp5m-_6Desp_t5tjuLbmp059porvUP3ipfwcKIfAw2D-_aqKQdqoS-3iY_3jYp25wk8vWi_S8ViUVQ \
+  -e SPRING_DOCKER_COMPOSE_ENABLED=false \
+   --name user-management cf-user-management:latest
