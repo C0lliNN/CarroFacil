@@ -1,0 +1,16 @@
+RUN	com.raphaelcollin.MySimulation	mysimulation	1717430035832	 	3.11.3
+USER	scn	START	1717430036297
+USER	scn	START	1717430036297
+USER	scn	START	1717430036297
+USER	scn	START	1717430036297
+USER	scn	START	1717430036297
+REQUEST		My Request	1717430036296	1717430036299	KO	j.n.ConnectException: finishConnect(..) failed: Connection refused
+REQUEST		My Request	1717430036296	1717430036299	KO	j.n.ConnectException: finishConnect(..) failed: Connection refused
+REQUEST		My Request	1717430036296	1717430036299	KO	j.n.ConnectException: finishConnect(..) failed: Connection refused
+REQUEST		My Request	1717430036296	1717430036299	KO	j.n.ConnectException: finishConnect(..) failed: Connection refused
+REQUEST		My Request	1717430036296	1717430036299	KO	j.n.ConnectException: finishConnect(..) failed: Connection refused
+USER	scn	END	1717430036306
+USER	scn	END	1717430036306
+USER	scn	END	1717430036306
+USER	scn	END	1717430036306
+USER	scn	END	1717430036306
