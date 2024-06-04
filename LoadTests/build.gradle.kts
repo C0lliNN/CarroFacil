@@ -17,6 +17,8 @@ dependencies {
     implementation("io.gatling:gatling-core:3.11.1")
     // https://mvnrepository.com/artifact/io.gatling/gatling-test-framework
     testImplementation("io.gatling:gatling-test-framework:3.11.1")
+    // testImplementation("com.github.javafaker:javafaker:1.0.2")
+    gatlingImplementation("com.github.javafaker:javafaker:1.0.2")
     // https://mvnrepository.com/artifact/io.gatling/gatling-app
     implementation("io.gatling:gatling-app:3.11.1")
 
