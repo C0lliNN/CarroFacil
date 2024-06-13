@@ -9,14 +9,13 @@ public record SaveVehicleTypeRequest(
         @Min(value = 1, message = "Id must be a positive number")
         int id,
 
-        String make,
-        String model,
-        int year,
+        @NotBlank(message = "Name is required")
+        String name,
 
         @NotBlank(message = "Category is required")
         VehicleCategory category
 ) {
     public VehicleType toVehicleType() {
-        return new VehicleType(id, make, model, year, category);
+        return new VehicleType(id, name, category);
     }
 }

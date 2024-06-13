@@ -8,11 +8,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
 public class Vehicle {
     private int id;
     private VehicleType type;
     private Store store;
+    private String make;
+    private String model;
+    private int year;
     private int mileage;
     private String licensePlate;
     private String chassisNumber;

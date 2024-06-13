@@ -17,6 +17,15 @@ public record SaveVehicleRequest(
         @Min(value = 1, message = "Store id must be a positive number")
         int storeId,
 
+        @NotBlank(message = "Make is required")
+        String make,
+
+        @NotBlank(message = "Model is required")
+        String model,
+
+        @Min(value = 1900, message = "Year must be greater than or equal to 1900")
+        int year,
+
         @Min(value = 0, message = "Mileage must be a positive number")
         int mileage,
 
@@ -33,7 +42,7 @@ public record SaveVehicleRequest(
         String color
 ) {
     public Vehicle toVehicle(Store store, VehicleType type) {
-        return new Vehicle(id, type, store, mileage, licensePlate, chassisNumber, engineNumber, color, VehicleStatus.AVAILABLE);
+        return new Vehicle(id, type, store, make, model, year, mileage, licensePlate, chassisNumber, engineNumber, color, VehicleStatus.AVAILABLE);
     }
 
 }

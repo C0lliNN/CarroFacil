@@ -7,8 +7,6 @@ import lombok.Getter;
 @Getter
 public class VehicleType {
     private int id;
-    private String make;
-    private String model;
-    private int year;
+    private String name;
     private VehicleCategory category;
 }

@@ -73,8 +73,8 @@ class InventoryServiceTest {
         @Test
         @DisplayName("when called, then it should return a list of VehicleTypeResponse")
         void whenCalled_thenItShouldReturnAListOfVehicleTypeResponse() {
-            VehicleType type1 = new VehicleType(1, "Hyundai", "HB20", 2021, VehicleCategory.HATCH);
-            VehicleType type2 = new VehicleType(2, "Chevrolet", "Onix", 2021, VehicleCategory.HATCH);
+            VehicleType type1 = new VehicleType(1, "Hyundai",  VehicleCategory.HATCH);
+            VehicleType type2 = new VehicleType(2, "Chevrolet",  VehicleCategory.HATCH);
             when(vehicleRepository.getVehicleTypesByStore(1)).thenReturn(List.of(type1, type2));
 
             VehicleTypeResponse response1 = VehicleTypeResponse.fromVehicleType(type1);
@@ -94,7 +94,7 @@ class InventoryServiceTest {
         @Test
         @DisplayName("when called, then it should save the vehicle type and return a VehicleTypeResponse")
         void whenCalled_thenItShouldSaveTheVehicleTypeAndReturnAVehicleTypeResponse() {
-            SaveVehicleTypeRequest request = new SaveVehicleTypeRequest(1, "Hyundai", "HB20", 2021, VehicleCategory.HATCH);
+            SaveVehicleTypeRequest request = new SaveVehicleTypeRequest(1, "Hyundai", VehicleCategory.HATCH);
             when(vehicleRepository.saveVehicleType(Mockito.any())).thenReturn(request.toVehicleType());
 
             VehicleTypeResponse response = inventoryService.saveVehicleType(request);
@@ -111,9 +111,9 @@ class InventoryServiceTest {
         @Test
         @DisplayName("when called, then it should return a list of VehicleResponse")
         void whenCalled_thenItShouldReturnAListOfVehicleResponse() {
-            VehicleType type = new VehicleType(1, "Hyundai", "HB20", 2021, VehicleCategory.HATCH);
+            VehicleType type = new VehicleType(1, "Hyundai", VehicleCategory.HATCH);
             Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
-            Vehicle vehicle = new Vehicle(1, type, store, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2020, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
             when(vehicleRepository.getVehiclesByType(1)).thenReturn(List.of(vehicle));
 
             VehicleResponse response = VehicleResponse.fromVehicle(vehicle);
@@ -132,7 +132,7 @@ class InventoryServiceTest {
         @Test
         @DisplayName("when store is not found, then it should throw an EntityNotFoundException")
         void whenStoreIsNotFound_thenItShouldThrowAnEntityNotFoundException() {
-            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, 0, "ABC1234", "123456", "654321", "Black");
+            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, "Hyundai", "HB20", 2020, 0, "ABC1234", "123456", "654321", "Black");
             when(storeRepository.findById(1)).thenReturn(java.util.Optional.empty());
 
             assertThrows(EntityNotFoundException.class, () -> inventoryService.saveVehicle(request));
@@ -144,7 +144,7 @@ class InventoryServiceTest {
         @Test
         @DisplayName("when vehicle type is not found, then it should throw an EntityNotFoundException")
         void whenVehicleTypeIsNotFound_thenItShouldThrowAnEntityNotFoundException() {
-            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, 0, "ABC1234", "123456", "654321", "Black");
+            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, "Hyundai", "HB20", 2020,0, "ABC1234", "123456", "654321", "Black");
             Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
             when(storeRepository.findById(1)).thenReturn(java.util.Optional.of(store));
             when(vehicleRepository.findVehicleTypeById(1)).thenReturn(java.util.Optional.empty());
@@ -158,10 +158,10 @@ class InventoryServiceTest {
         @Test
         @DisplayName("when called, then it should save the vehicle and return a VehicleResponse")
         void whenCalled_thenItShouldSaveTheVehicleAndReturnAVehicleResponse() {
-            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, 0, "ABC1234", "123456", "654321", "Black");
+            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black");
             Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
-            VehicleType type = new VehicleType(1, "Hyundai", "HB20", 2021, VehicleCategory.HATCH);
-            Vehicle vehicle = new Vehicle(1, type, store, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
+            VehicleType type = new VehicleType(1, "Compact Hatch", VehicleCategory.HATCH);
+            Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
             when(storeRepository.findById(1)).thenReturn(java.util.Optional.of(store));
             when(vehicleRepository.findVehicleTypeById(1)).thenReturn(java.util.Optional.of(type));
             when(vehicleRepository.saveVehicle(Mockito.any())).thenReturn(vehicle);
@@ -192,7 +192,10 @@ class InventoryServiceTest {
         @Test
         @DisplayName("when called, then it should book the vehicle")
         void whenCalled_thenItShouldBookTheVehicle() {
-            Vehicle vehicle = new Vehicle(1, new VehicleType(1, "Hyundai", "HB20", 2021, VehicleCategory.HATCH), new Store(1, "Store 1", "Address 1", "2342342", 24, 88), 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
+            VehicleType type = new VehicleType(1, "Compact Hatch", VehicleCategory.HATCH);
+            Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
+
+            Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2021,  0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
             when(vehicleRepository.findById(1)).thenReturn(java.util.Optional.of(vehicle));
 
             inventoryService.bookVehicle(1);

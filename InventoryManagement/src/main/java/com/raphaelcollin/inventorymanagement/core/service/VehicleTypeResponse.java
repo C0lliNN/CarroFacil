@@ -1,20 +1,17 @@
 package com.raphaelcollin.inventorymanagement.core.service;
 
 import com.raphaelcollin.inventorymanagement.core.VehicleCategory;
+import com.raphaelcollin.inventorymanagement.core.VehicleType;
 
 public record VehicleTypeResponse(
         int id,
-        String make,
-        String model,
-        int year,
+        String name,
         VehicleCategory category
 ) {
-    public static VehicleTypeResponse fromVehicleType(com.raphaelcollin.inventorymanagement.core.VehicleType vehicleType) {
+    public static VehicleTypeResponse fromVehicleType(VehicleType vehicleType) {
         return new VehicleTypeResponse(
                 vehicleType.getId(),
-                vehicleType.getMake(),
-                vehicleType.getModel(),
-                vehicleType.getYear(),
+                vehicleType.getName(),
                 vehicleType.getCategory()
         );
     }
