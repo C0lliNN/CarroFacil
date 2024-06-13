@@ -9,8 +9,6 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
-@Setter
-@NoArgsConstructor
 public class Vehicle {
     private int id;
     private VehicleType type;
