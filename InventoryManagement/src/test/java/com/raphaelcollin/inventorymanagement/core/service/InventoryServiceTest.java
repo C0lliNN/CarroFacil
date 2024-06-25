@@ -114,14 +114,14 @@ class InventoryServiceTest {
             VehicleType type = new VehicleType(1, "Hyundai", VehicleCategory.HATCH);
             Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
             Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2020, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
-            when(vehicleRepository.getVehiclesByType(1)).thenReturn(List.of(vehicle));
+            when(vehicleRepository.findVehiclesByType(1)).thenReturn(List.of(vehicle));
 
             VehicleResponse response = VehicleResponse.fromVehicle(vehicle);
 
             List<VehicleResponse> responses = inventoryService.getVehiclesByType(1);
 
             assertEquals(List.of(response), responses);
-            verify(vehicleRepository).getVehiclesByType(1);
+            verify(vehicleRepository).findVehiclesByType(1);
         }
     }
 

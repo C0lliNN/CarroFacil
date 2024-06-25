@@ -32,7 +32,7 @@ public class InventoryService {
     }
 
     public List<VehicleResponse> getVehiclesByType(int typeId) {
-        return vehicleRepository.getVehiclesByType(typeId).stream()
+        return vehicleRepository.findVehiclesByType(typeId).stream()
                 .map(VehicleResponse::fromVehicle).toList();
     }
 
