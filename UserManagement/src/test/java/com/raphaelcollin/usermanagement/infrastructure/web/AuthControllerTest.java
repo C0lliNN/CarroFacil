@@ -6,10 +6,12 @@ import com.raphaelcollin.usermanagement.core.User;
 import com.raphaelcollin.usermanagement.core.UserRepository;
 import com.raphaelcollin.usermanagement.core.request.LoginRequest;
 import com.raphaelcollin.usermanagement.core.request.RegisterRequest;
+import com.raphaelcollin.usermanagement.core.response.UserResponse;
 import com.raphaelcollin.usermanagement.infrastructure.IntegrationTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -354,6 +356,67 @@ class AuthControllerTest extends IntegrationTest {
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("The email '%s' is already in use.".formatted(payload.email())))
                     .andExpect(jsonPath("$.details").isEmpty());
+        }
+    }
+
+    @Nested
+    @DisplayName("method: validate(ValidateTokenRequest)")
+    class ValidateMethod {
+
+        @Test
+        @DisplayName("when called with invalid token, then it should return 401 error")
+        void whenCalledWithInvalidToken_shouldReturn401Error() throws Exception {
+            MockHttpServletRequestBuilder request = post(BASE_URL + "/validate")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"token\": \"invalid_token\"}");
+
+            mockMvc.perform(request)
+                    .andDo(print())
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.details").isEmpty());
+        }
+
+        @Test
+        @DisplayName("when called with valid token, then it should return 200 and the user")
+        void whenCalledWithValidToken_shouldReturn200AndTheUser() throws Exception {
+            RegisterRequest payload = new RegisterRequest(
+                    NAME,
+                    EMAIL,
+                    PASSWORD
+            );
+
+            MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(payload));
+
+            MvcResult mvcResult = mockMvc.perform(request)
+                    .andDo(print())
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.id").isNotEmpty())
+                    .andExpect(jsonPath("$.name").value(payload.name()))
+                    .andExpect(jsonPath("$.email").value(payload.email()))
+                    .andExpect(jsonPath("$.token").isNotEmpty())
+                    .andReturn();
+
+            UserResponse user = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), UserResponse.class);
+
+            String token = user.token();
+
+            request = post(BASE_URL + "/validate")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"token\": \"%s\"}".formatted(token));
+
+            mockMvc.perform(request)
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value(user.id()))
+                    .andExpect(jsonPath("$.name").value(user.name()))
+                    .andExpect(jsonPath("$.type").value(user.type().name()))
+                    .andExpect(jsonPath("$.email").value(user.email()))
+                    .andExpect(jsonPath("$.token").isNotEmpty());
         }
     }
 }

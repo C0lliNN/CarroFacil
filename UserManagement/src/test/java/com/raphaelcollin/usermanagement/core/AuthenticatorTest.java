@@ -35,7 +35,7 @@ class AuthenticatorTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private TokenGenerator tokenGenerator;
+    private TokenManager tokenManager;
 
     @Nested
     @DisplayName("method: login(LoginRequest)")
@@ -58,7 +58,7 @@ class AuthenticatorTest {
                     .hasMessage("The email '%s' could not be found.", request.email());
 
             verify(repository).findByEmail(request.email());
-            verifyNoInteractions(passwordEncoder, tokenGenerator);
+            verifyNoInteractions(passwordEncoder, tokenManager);
         }
 
         @Test
@@ -86,7 +86,7 @@ class AuthenticatorTest {
             verify(passwordEncoder).comparePasswordAndHash(request.password(), user.getPassword());
 
             verifyNoMoreInteractions(passwordEncoder);
-            verifyNoInteractions(tokenGenerator);
+            verifyNoInteractions(tokenManager);
         }
 
         @Test
@@ -105,7 +105,7 @@ class AuthenticatorTest {
 
             when(repository.findByEmail(request.email())).thenReturn(Optional.of(user));
             when(passwordEncoder.comparePasswordAndHash(request.password(), user.getPassword())).thenReturn(true);
-            when(tokenGenerator.generateTokenForUser(user)).thenReturn(token);
+            when(tokenManager.generateTokenForUser(user)).thenReturn(token);
 
             UserResponse expected = UserResponse.fromUser(user).withToken(token);
             UserResponse actual = useCase.login(request);
@@ -114,9 +114,9 @@ class AuthenticatorTest {
 
             verify(repository).findByEmail(request.email());
             verify(passwordEncoder).comparePasswordAndHash(request.password(), user.getPassword());
-            verify(tokenGenerator).generateTokenForUser(user);
+            verify(tokenManager).generateTokenForUser(user);
 
-            verifyNoMoreInteractions(passwordEncoder, tokenGenerator);
+            verifyNoMoreInteractions(passwordEncoder, tokenManager);
         }
     }
 
@@ -143,7 +143,7 @@ class AuthenticatorTest {
                     .hasMessage("The email '%s' is already in use.", existingUser.getEmail());
 
             verify(repository).findByEmail(request.email());
-            verifyNoInteractions(passwordEncoder, tokenGenerator);
+            verifyNoInteractions(passwordEncoder, tokenManager);
         }
 
         @Test
@@ -156,7 +156,7 @@ class AuthenticatorTest {
             when(passwordEncoder.hashPassword(request.password())).thenReturn("some-hashed-password");
             when(repository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
             when(repository.save(user)).thenReturn(user);
-            when(tokenGenerator.generateTokenForUser(user)).thenReturn("new-token");
+            when(tokenManager.generateTokenForUser(user)).thenReturn("new-token");
 
             UserResponse expected = UserResponse.fromUser(user).withToken("new-token");
             UserResponse actual = useCase.register(request);
@@ -165,9 +165,9 @@ class AuthenticatorTest {
 
             verify(passwordEncoder).hashPassword(request.password());
             verify(repository).save(user);
-            verify(tokenGenerator).generateTokenForUser(user);
+            verify(tokenManager).generateTokenForUser(user);
 
-            verifyNoMoreInteractions(passwordEncoder, repository, tokenGenerator);
+            verifyNoMoreInteractions(passwordEncoder, repository, tokenManager);
         }
     }
 }

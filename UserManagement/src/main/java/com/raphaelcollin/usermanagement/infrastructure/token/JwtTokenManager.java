@@ -1,9 +1,8 @@
 package com.raphaelcollin.usermanagement.infrastructure.token;
 
-import com.raphaelcollin.usermanagement.core.TokenGenerator;
+import com.raphaelcollin.usermanagement.core.TokenManager;
 import com.raphaelcollin.usermanagement.core.User;
 import com.raphaelcollin.usermanagement.core.exception.InvalidTokenException;
-import com.raphaelcollin.usermanagement.infrastructure.web.TokenExtractor;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class JwtTokenManager implements TokenGenerator, TokenExtractor {
+public class JwtTokenManager implements TokenManager {
     private final String secret;
     private final Long tokenDurationInMilliseconds;
 

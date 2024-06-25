@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class Authenticator {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenGenerator tokenGenerator;
+    private final TokenManager tokenManager;
 
     public UserResponse login(LoginRequest request) {
         User user = repository.findByEmail(request.email()).orElseThrow(() -> new EmailNotFoundException("The email '%s' could not be found.", request.email()));
@@ -39,8 +39,15 @@ public class Authenticator {
         return createUserResponseWithToken(user);
     }
 
+    public UserResponse validateToken(String token) {
+        User user = tokenManager.extractUserFromToken(token);
+
+        return createUserResponseWithToken(user);
+
+    }
+
     private UserResponse createUserResponseWithToken(User user) {
-        String token = tokenGenerator.generateTokenForUser(user);
+        String token = tokenManager.generateTokenForUser(user);
 
         return UserResponse.fromUser(user).withToken(token);
     }
