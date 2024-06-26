@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public record SaveStoreRequest(
-        @Min(value = 1, message = "Id must be a positive number")
         int id,
 
         @NotBlank(message = "Name is required")

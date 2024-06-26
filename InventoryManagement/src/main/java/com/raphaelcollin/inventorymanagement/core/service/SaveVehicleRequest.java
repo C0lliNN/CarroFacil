@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public record SaveVehicleRequest(
-        @Min(value = 1, message = "Id must be a positive number")
         int id,
 
         @Min(value = 1, message = "Type id must be a positive number")

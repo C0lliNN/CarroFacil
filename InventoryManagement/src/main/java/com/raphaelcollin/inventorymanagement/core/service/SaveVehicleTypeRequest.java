@@ -2,17 +2,16 @@ package com.raphaelcollin.inventorymanagement.core.service;
 
 import com.raphaelcollin.inventorymanagement.core.VehicleCategory;
 import com.raphaelcollin.inventorymanagement.core.VehicleType;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record SaveVehicleTypeRequest(
-        @Min(value = 1, message = "Id must be a positive number")
         int id,
 
         @NotBlank(message = "Name is required")
         String name,
 
-        @NotBlank(message = "Category is required")
+        @NotNull(message = "Category is required")
         VehicleCategory category
 ) {
     public VehicleType toVehicleType() {
