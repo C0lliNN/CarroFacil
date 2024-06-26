@@ -1,16 +1,20 @@
 package com.raphaelcollin.inventorymanagement.infrastructure.web.filter;
 
 import com.raphaelcollin.inventorymanagement.core.exception.InvalidTokenException;
+import com.raphaelcollin.inventorymanagement.infrastructure.web.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -35,10 +39,18 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain) throws ServletException, IOException {
-        String token = extractTokenFromRequest(request);
-        authorizationClient.validateToken(token);
+        try {
+            String token = extractTokenFromRequest(request);
+            User user = authorizationClient.validateToken(token);
 
-        chain.doFilter(request, response);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
+            chain.doFilter(request, response);
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
+            throw e;
+        }
     }
 
     private String extractTokenFromRequest(HttpServletRequest request) {

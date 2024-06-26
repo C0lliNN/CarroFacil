@@ -1,6 +1,7 @@
 package com.raphaelcollin.inventorymanagement.infrastructure.web.exception;
 
 import com.raphaelcollin.inventorymanagement.core.exception.EntityNotFoundException;
+import com.raphaelcollin.inventorymanagement.core.exception.InvalidTokenException;
 import com.raphaelcollin.inventorymanagement.core.exception.VehicleAlreadyBookedException;
 import com.raphaelcollin.inventorymanagement.core.exception.VehicleNotAvailableException;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,15 @@ public class ExceptionController {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionBody.fromMessage(e.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ExceptionBody> handleInvalidTokenException(InvalidTokenException e) {
+        log.error("An invalid token was provided: {}", e.getMessage(), e);
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(ExceptionBody.fromMessage(e.getMessage()));
     }
 

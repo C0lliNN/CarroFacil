@@ -1,5 +1,7 @@
 package com.raphaelcollin.inventorymanagement.infrastructure.web.filter;
 
+import com.raphaelcollin.inventorymanagement.infrastructure.web.User;
+
 public interface AuthorizationClient {
-    void validateToken(String token);
+    User validateToken(String token);
 }
