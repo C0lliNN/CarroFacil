@@ -1,12 +1,12 @@
 package com.raphaelcollin.inventorymanagement.infrastructure.web.filter;
 
 import com.raphaelcollin.inventorymanagement.core.exception.InvalidTokenException;
+import com.raphaelcollin.inventorymanagement.infrastructure.web.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mockito;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -50,8 +50,8 @@ class AuthorizationFilterTest {
         void testDoFilterInternal() {
             var authorizationClient = new AuthorizationClient() {
                 @Override
-                public void validateToken(String token) {
-                    // do nothing
+                public User validateToken(String token) {
+                    return new User("1", "username", "CUSTOMER", "email", "token");
                 }
             };
             var filter = new AuthorizationFilter(authorizationClient);
@@ -68,7 +68,7 @@ class AuthorizationFilterTest {
         void testDoFilterInternalInvalidToken() {
             var authorizationClient = new AuthorizationClient() {
                 @Override
-                public void validateToken(String token) {
+                public User validateToken(String token) {
                     throw new InvalidTokenException("Invalid token");
                 }
             };
