@@ -4,6 +4,7 @@ import com.raphaelcollin.inventorymanagement.core.*;
 import com.raphaelcollin.inventorymanagement.core.exception.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -36,6 +37,11 @@ public class InventoryService {
                 .map(VehicleResponse::fromVehicle).toList();
     }
 
+    public VehicleResponse getVehicleById(int id) {
+        return VehicleResponse.fromVehicle(vehicleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found")));
+    }
+
     public VehicleResponse saveVehicle(SaveVehicleRequest request) {
         Store store = storeRepository.findById(request.storeId())
                 .orElseThrow(() -> new EntityNotFoundException("Store not found"));
@@ -46,7 +52,7 @@ public class InventoryService {
         return VehicleResponse.fromVehicle(vehicleRepository.saveVehicle(request.toVehicle(store, type)));
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void bookVehicle(int vehicleId) {
         Vehicle vehicle = vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle not found"));

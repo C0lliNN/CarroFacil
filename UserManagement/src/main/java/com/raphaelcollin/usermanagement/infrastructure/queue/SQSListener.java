@@ -6,6 +6,7 @@ import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.services.sqs.model.Message;
 
 @Component
 @Slf4j
@@ -15,12 +16,14 @@ public class SQSListener {
     private final ObjectMapper objectMapper;
 
     @SqsListener(queueNames = "${aws.queues.bookings}")
-    public void listen(String message) {
+    public void listen(Message message) {
         try {
-            BookingMessage bookingMessage = objectMapper.readValue(message, BookingMessage.class);
+            MessageBody body = objectMapper.readValue(message.body(), MessageBody.class);
+            BookingMessage bookingMessage = objectMapper.readValue(body.getMessage(), BookingMessage.class);
+
             log.info("Received message: {}", bookingMessage);
 
-            bookingsCounter.incrementUserBookingsCount(bookingMessage.userId());
+            bookingsCounter.incrementUserBookingsCount(bookingMessage.getUserId());
         } catch (Exception e) {
             throw new RuntimeException("Error while processing message", e);
         }

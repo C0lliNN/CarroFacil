@@ -176,6 +176,35 @@ class InventoryServiceTest {
     }
 
     @Nested
+    @DisplayName("method: getVehicleById(int)")
+    class GetVehicleByIdMethod {
+
+        @Test
+        @DisplayName("when vehicle is not found, then it should throw an EntityNotFoundException")
+        void whenVehicleIsNotFound_thenItShouldThrowAnEntityNotFoundException() {
+            when(vehicleRepository.findById(1)).thenReturn(java.util.Optional.empty());
+
+            assertThrows(EntityNotFoundException.class, () -> inventoryService.getVehicleById(1));
+            verify(vehicleRepository).findById(1);
+        }
+
+        @Test
+        @DisplayName("when called, then it should return a VehicleResponse")
+        void whenCalled_thenItShouldReturnAVehicleResponse() {
+            VehicleType type = new VehicleType(1, "Compact Hatch", VehicleCategory.HATCH);
+            Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
+
+            Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
+            when(vehicleRepository.findById(1)).thenReturn(java.util.Optional.of(vehicle));
+
+            VehicleResponse response = inventoryService.getVehicleById(1);
+
+            assertEquals(VehicleResponse.fromVehicle(vehicle), response);
+            verify(vehicleRepository).findById(1);
+        }
+    }
+
+    @Nested
     @DisplayName("method: bookVehicle(int)")
     class BookVehicleMethod {
 

@@ -37,6 +37,11 @@ public class InventoryManagementController {
         return service.getVehiclesByType(typeId);
     }
 
+    @GetMapping("/vehicles/{id}")
+    public VehicleResponse getVehicleById(@PathVariable int id) {
+        return service.getVehicleById(id);
+    }
+
     @PutMapping("/vehicles")
     public VehicleResponse saveVehicle(@RequestBody @Valid SaveVehicleRequest request) {
         return service.saveVehicle(request);

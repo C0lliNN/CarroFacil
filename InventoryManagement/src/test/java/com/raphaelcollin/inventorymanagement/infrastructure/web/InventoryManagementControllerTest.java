@@ -228,6 +228,41 @@ class InventoryManagementControllerTest extends IntegrationTest {
     }
 
     @Nested
+    @DisplayName("GET /vehicles/{id}")
+    class GetVehicleById {
+
+        @Test
+        @DisplayName("when vehicle does not exist, then it should return 404")
+        void whenVehicleDoesNotExistShouldReturn404() throws Exception {
+            mockMvc.perform(get("/vehicles/1").header("Authorization", "Bearer valid"))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("when vehicle exists, then it should return 200")
+        void whenVehicleExistsShouldReturn200() throws Exception {
+            VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
+            vehicleType = vehicleRepository.saveVehicleType(vehicleType);
+
+            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
+            store = storeRepository.save(store);
+
+            Vehicle vehicle = new Vehicle(0, vehicleType, store, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            vehicle = vehicleRepository.saveVehicle(vehicle);
+
+            mockMvc.perform(get("/vehicles/" + vehicle.getId()).header("Authorization", "Bearer valid"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value(vehicle.getId()))
+                    .andExpect(jsonPath("$.licensePlate").value(vehicle.getLicensePlate()))
+                    .andExpect(jsonPath("$.mileage").value(vehicle.getMileage()))
+                    .andExpect(jsonPath("$.chassisNumber").value(vehicle.getChassisNumber()))
+                    .andExpect(jsonPath("$.engineNumber").value(vehicle.getEngineNumber()))
+                    .andExpect(jsonPath("$.color").value(vehicle.getColor()))
+                    .andExpect(jsonPath("$.status").value(vehicle.getStatus().name()));
+        }
+    }
+
+    @Nested
     @DisplayName("PATCH /vehicles/{vehicleId}/book")
     class PatchVehiclesBook {
 

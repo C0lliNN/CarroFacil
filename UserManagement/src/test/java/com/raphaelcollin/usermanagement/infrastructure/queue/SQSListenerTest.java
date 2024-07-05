@@ -6,6 +6,8 @@ import com.raphaelcollin.usermanagement.infrastructure.IntegrationTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -31,10 +33,17 @@ class SQSListenerTest extends IntegrationTest {
                     .build();
             repository.save(user);
 
-            String message = "{\"userId\":\"%s\",\"bookingId\":\"bookingId\"}".formatted(user.getId());
+            MessageBody body = new MessageBody("{\"userId\":\"%s\",\"bookingId\":2}".formatted(user.getId()));
 
-            sqsClient.sendMessage(r -> r.queueUrl("http://localhost:4566/000000000000/bookings")
-                    .messageBody(message)).get();
+
+            sqsClient.sendMessage(r -> {
+                try {
+                    r.queueUrl("http://localhost:4566/000000000000/bookings")
+                            .messageBody(new ObjectMapper().writeValueAsString(body));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }).get();
 
             await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
                 User result = repository.findById(user.getId()).get();

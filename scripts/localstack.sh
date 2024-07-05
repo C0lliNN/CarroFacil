@@ -16,4 +16,8 @@ awslocal dynamodb put-item --table-name users --item \
 awslocal dynamodb query --table-name users --index-name emailIndex --key-condition-expression "email = :email" \
   --expression-attribute-values '{":email": {"S": "test@test.com"}}'
 
+awslocal sns create-topic --name booking-events
+
 awslocal sqs create-queue --queue-name bookings
+
+awslocal sns subscribe --topic-arn arn:aws:sns:us-east-1:000000000000:booking-events  --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:bookings
