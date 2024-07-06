@@ -3,6 +3,7 @@ package com.raphaelcollin.inventorymanagement.infrastructure.web;
 import com.raphaelcollin.inventorymanagement.IntegrationTest;
 import com.raphaelcollin.inventorymanagement.core.*;
 import com.raphaelcollin.inventorymanagement.core.service.SaveVehicleRequest;
+import com.raphaelcollin.inventorymanagement.infrastructure.security.WithMockEmployee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
     class PutStores {
 
         @Test
+        @WithMockEmployee
         @DisplayName("when request is not valid, then it should return 400")
         void whenRequestIsNotValidShouldReturn400() throws Exception {
             mockMvc.perform(put("/stores").contentType("application/json").content("{}"))
@@ -61,6 +63,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
         }
 
         @Test
+        @WithMockEmployee
         @DisplayName("when request is valid, then it should return 200")
         void whenRequestIsValidShouldReturn200() throws Exception {
             mockMvc.perform(put("/stores").contentType("application/json")
@@ -76,6 +79,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
     class PutVehicleTypes {
 
         @Test
+        @WithMockEmployee
         @DisplayName("when request is not valid, then it should return 400")
         void whenRequestIsNotValidShouldReturn400() throws Exception {
             mockMvc.perform(put("/vehicle-types").contentType("application/json").content("{}"))
@@ -83,6 +87,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
         }
 
         @Test
+        @WithMockEmployee
         @DisplayName("when request is valid, then it should return 200")
         void whenRequestIsValidShouldReturn200() throws Exception {
             mockMvc.perform(put("/vehicle-types").contentType("application/json")
@@ -192,6 +197,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
     class PutVehicles {
 
         @Test
+        @WithMockEmployee
         @DisplayName("when request is not valid, then it should return 400")
         void whenRequestIsNotValidShouldReturn400() throws Exception {
             mockMvc.perform(put("/vehicles").contentType("application/json").content("{}"))
@@ -199,6 +205,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
         }
 
         @Test
+        @WithMockEmployee
         @DisplayName("when request is valid, then it should return 200")
         void whenRequestIsValidShouldReturn200() throws Exception {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
