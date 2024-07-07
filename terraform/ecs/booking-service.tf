@@ -2,8 +2,8 @@ resource "aws_ecs_task_definition" "booking_service_task" {
   family                   = "booking_service"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 1024
-  memory                   = 2048
+  cpu                      = 2048
+  memory                   = 4096
 
   task_role_arn      = aws_iam_role.task_definition_task_role.arn
   execution_role_arn = aws_iam_role.task_definition_execution_role.arn

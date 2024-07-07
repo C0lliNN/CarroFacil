@@ -2,8 +2,8 @@ resource "aws_ecs_task_definition" "user_management_task" {
   family             = "user_management"
   network_mode       = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                = 1024
-  memory             = 2048
+  cpu                = 2048
+  memory             = 4096
   execution_role_arn = aws_iam_role.task_definition_execution_role.arn
   task_role_arn      = aws_iam_role.task_definition_task_role.arn
 

@@ -1,17 +1,17 @@
 resource "aws_ecs_task_definition" "inventory_management_task" {
-  family                   = "inventory_management"
-  network_mode             = "awsvpc"
+  family             = "inventory_management"
+  network_mode       = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 1024
-  memory                   = 2048
-  execution_role_arn       = aws_iam_role.task_definition_execution_role.arn
-  task_role_arn            = aws_iam_role.task_definition_task_role.arn
+  cpu                = 2048
+  memory             = 4096
+  execution_role_arn = aws_iam_role.task_definition_execution_role.arn
+  task_role_arn      = aws_iam_role.task_definition_task_role.arn
 
   container_definitions = jsonencode([
     {
-      name         = "inventory_management"
-      image        = "c0lllinn/cf-inventory-management:latest"
-      essential    = true
+      name      = "inventory_management"
+      image     = "c0lllinn/cf-inventory-management:latest"
+      essential = true
       portMappings = [
         {
           containerPort = 80
@@ -40,7 +40,7 @@ resource "aws_ecs_task_definition" "inventory_management_task" {
           value = "prod"
         },
         {
-          name = "AUTH_AUTHORIZATIONSERVER_URL"
+          name  = "AUTH_AUTHORIZATIONSERVER_URL"
           value = "http://${module.user_management_alb.alb_dns_name}/auth/validate"
         }
       ]
@@ -65,14 +65,14 @@ resource "aws_ecs_service" "inventory_management_service" {
   launch_type     = "FARGATE"
   network_configuration {
     subnets          = var.subnet_ids
-    security_groups  = [var.security_group_id]
+    security_groups = [var.security_group_id]
     assign_public_ip = true
   }
 
   load_balancer {
     target_group_arn = module.inventory_management_alb.tg_alb_arn
-    container_name = aws_ecs_task_definition.inventory_management_task.family
-    container_port = 80
+    container_name   = aws_ecs_task_definition.inventory_management_task.family
+    container_port   = 80
   }
 }
 
