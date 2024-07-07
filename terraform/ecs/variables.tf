@@ -33,3 +33,9 @@ variable "inventory_management_log_group_name" {}
 variable "booking_service_log_group_name" {}
 
 variable "vpc_id" {}
+
+variable "employee_email" {}
+
+variable "employee_password" {}
+
+variable "aws_sns_topic_bookings" {}

@@ -1,0 +1,497 @@
+{
+  "type": "GROUP",
+"name": "All Requests",
+"path": "",
+"pathFormatted": "group_missing-name--1146707516",
+"stats": {
+    "name": "All Requests",
+    "numberOfRequests": {
+        "total": 6107,
+        "ok": 3651,
+        "ko": 2456
+    },
+    "minResponseTime": {
+        "total": 3,
+        "ok": 3,
+        "ko": 4
+    },
+    "maxResponseTime": {
+        "total": 518,
+        "ok": 518,
+        "ko": 237
+    },
+    "meanResponseTime": {
+        "total": 66,
+        "ok": 84,
+        "ko": 40
+    },
+    "standardDeviation": {
+        "total": 97,
+        "ok": 118,
+        "ko": 42
+    },
+    "percentiles1": {
+        "total": 6,
+        "ok": 6,
+        "ko": 12
+    },
+    "percentiles2": {
+        "total": 96,
+        "ok": 195,
+        "ko": 72
+    },
+    "percentiles3": {
+        "total": 288,
+        "ok": 311,
+        "ko": 119
+    },
+    "percentiles4": {
+        "total": 344,
+        "ok": 355,
+        "ko": 145
+    },
+    "group1": {
+    "name": "t < 800 ms",
+    "htmlName": "t < 800 ms",
+    "count": 3651,
+    "percentage": 59.7838545930899
+},
+    "group2": {
+    "name": "800 ms <= t < 1200 ms",
+    "htmlName": "t >= 800 ms <br> t < 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group3": {
+    "name": "t >= 1200 ms",
+    "htmlName": "t >= 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group4": {
+    "name": "failed",
+    "htmlName": "failed",
+    "count": 2456,
+    "percentage": 40.2161454069101
+},
+    "meanNumberOfRequestsPerSecond": {
+        "total": 197.0,
+        "ok": 117.7741935483871,
+        "ko": 79.2258064516129
+    }
+},
+"contents": {
+"req_register--625569085": {
+        "type": "REQUEST",
+        "name": "Register",
+"path": "Register",
+"pathFormatted": "req_register--625569085",
+"stats": {
+    "name": "Register",
+    "numberOfRequests": {
+        "total": 1228,
+        "ok": 1217,
+        "ko": 11
+    },
+    "minResponseTime": {
+        "total": 29,
+        "ok": 83,
+        "ko": 29
+    },
+    "maxResponseTime": {
+        "total": 518,
+        "ok": 518,
+        "ko": 121
+    },
+    "meanResponseTime": {
+        "total": 241,
+        "ok": 242,
+        "ko": 69
+    },
+    "standardDeviation": {
+        "total": 65,
+        "ok": 63,
+        "ko": 31
+    },
+    "percentiles1": {
+        "total": 237,
+        "ok": 238,
+        "ko": 70
+    },
+    "percentiles2": {
+        "total": 288,
+        "ok": 288,
+        "ko": 97
+    },
+    "percentiles3": {
+        "total": 343,
+        "ok": 344,
+        "ko": 114
+    },
+    "percentiles4": {
+        "total": 408,
+        "ok": 408,
+        "ko": 120
+    },
+    "group1": {
+    "name": "t < 800 ms",
+    "htmlName": "t < 800 ms",
+    "count": 1217,
+    "percentage": 99.1042345276873
+},
+    "group2": {
+    "name": "800 ms <= t < 1200 ms",
+    "htmlName": "t >= 800 ms <br> t < 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group3": {
+    "name": "t >= 1200 ms",
+    "htmlName": "t >= 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group4": {
+    "name": "failed",
+    "htmlName": "failed",
+    "count": 11,
+    "percentage": 0.8957654723127036
+},
+    "meanNumberOfRequestsPerSecond": {
+        "total": 39.61290322580645,
+        "ok": 39.25806451612903,
+        "ko": 0.3548387096774194
+    }
+}
+    },"req_create-vehicle-1798009864": {
+        "type": "REQUEST",
+        "name": "Create Vehicle",
+"path": "Create Vehicle",
+"pathFormatted": "req_create-vehicle-1798009864",
+"stats": {
+    "name": "Create Vehicle",
+    "numberOfRequests": {
+        "total": 1228,
+        "ok": 0,
+        "ko": 1228
+    },
+    "minResponseTime": {
+        "total": 4,
+        "ok": 0,
+        "ko": 4
+    },
+    "maxResponseTime": {
+        "total": 20,
+        "ok": 0,
+        "ko": 20
+    },
+    "meanResponseTime": {
+        "total": 6,
+        "ok": 0,
+        "ko": 6
+    },
+    "standardDeviation": {
+        "total": 1,
+        "ok": 0,
+        "ko": 1
+    },
+    "percentiles1": {
+        "total": 5,
+        "ok": 0,
+        "ko": 5
+    },
+    "percentiles2": {
+        "total": 6,
+        "ok": 0,
+        "ko": 6
+    },
+    "percentiles3": {
+        "total": 7,
+        "ok": 0,
+        "ko": 7
+    },
+    "percentiles4": {
+        "total": 8,
+        "ok": 0,
+        "ko": 8
+    },
+    "group1": {
+    "name": "t < 800 ms",
+    "htmlName": "t < 800 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group2": {
+    "name": "800 ms <= t < 1200 ms",
+    "htmlName": "t >= 800 ms <br> t < 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group3": {
+    "name": "t >= 1200 ms",
+    "htmlName": "t >= 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group4": {
+    "name": "failed",
+    "htmlName": "failed",
+    "count": 1228,
+    "percentage": 100.0
+},
+    "meanNumberOfRequestsPerSecond": {
+        "total": 39.61290322580645,
+        "ok": 0,
+        "ko": 39.61290322580645
+    }
+}
+    },"req_book-vehicle--483763979": {
+        "type": "REQUEST",
+        "name": "Book Vehicle",
+"path": "Book Vehicle",
+"pathFormatted": "req_book-vehicle--483763979",
+"stats": {
+    "name": "Book Vehicle",
+    "numberOfRequests": {
+        "total": 1217,
+        "ok": 0,
+        "ko": 1217
+    },
+    "minResponseTime": {
+        "total": 11,
+        "ok": 0,
+        "ko": 11
+    },
+    "maxResponseTime": {
+        "total": 237,
+        "ok": 0,
+        "ko": 237
+    },
+    "meanResponseTime": {
+        "total": 74,
+        "ok": 0,
+        "ko": 74
+    },
+    "standardDeviation": {
+        "total": 35,
+        "ok": 0,
+        "ko": 35
+    },
+    "percentiles1": {
+        "total": 72,
+        "ok": 0,
+        "ko": 72
+    },
+    "percentiles2": {
+        "total": 97,
+        "ok": 0,
+        "ko": 97
+    },
+    "percentiles3": {
+        "total": 133,
+        "ok": 0,
+        "ko": 133
+    },
+    "percentiles4": {
+        "total": 152,
+        "ok": 0,
+        "ko": 152
+    },
+    "group1": {
+    "name": "t < 800 ms",
+    "htmlName": "t < 800 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group2": {
+    "name": "800 ms <= t < 1200 ms",
+    "htmlName": "t >= 800 ms <br> t < 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group3": {
+    "name": "t >= 1200 ms",
+    "htmlName": "t >= 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group4": {
+    "name": "failed",
+    "htmlName": "failed",
+    "count": 1217,
+    "percentage": 100.0
+},
+    "meanNumberOfRequestsPerSecond": {
+        "total": 39.25806451612903,
+        "ok": 0,
+        "ko": 39.25806451612903
+    }
+}
+    },"req_check-in-bookin-34805366": {
+        "type": "REQUEST",
+        "name": "Check in Booking",
+"path": "Check in Booking",
+"pathFormatted": "req_check-in-bookin-34805366",
+"stats": {
+    "name": "Check in Booking",
+    "numberOfRequests": {
+        "total": 1217,
+        "ok": 1217,
+        "ko": 0
+    },
+    "minResponseTime": {
+        "total": 3,
+        "ok": 3,
+        "ko": 0
+    },
+    "maxResponseTime": {
+        "total": 23,
+        "ok": 23,
+        "ko": 0
+    },
+    "meanResponseTime": {
+        "total": 5,
+        "ok": 5,
+        "ko": 0
+    },
+    "standardDeviation": {
+        "total": 1,
+        "ok": 1,
+        "ko": 0
+    },
+    "percentiles1": {
+        "total": 5,
+        "ok": 5,
+        "ko": 0
+    },
+    "percentiles2": {
+        "total": 6,
+        "ok": 6,
+        "ko": 0
+    },
+    "percentiles3": {
+        "total": 7,
+        "ok": 7,
+        "ko": 0
+    },
+    "percentiles4": {
+        "total": 8,
+        "ok": 8,
+        "ko": 0
+    },
+    "group1": {
+    "name": "t < 800 ms",
+    "htmlName": "t < 800 ms",
+    "count": 1217,
+    "percentage": 100.0
+},
+    "group2": {
+    "name": "800 ms <= t < 1200 ms",
+    "htmlName": "t >= 800 ms <br> t < 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group3": {
+    "name": "t >= 1200 ms",
+    "htmlName": "t >= 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group4": {
+    "name": "failed",
+    "htmlName": "failed",
+    "count": 0,
+    "percentage": 0.0
+},
+    "meanNumberOfRequestsPerSecond": {
+        "total": 39.25806451612903,
+        "ok": 39.25806451612903,
+        "ko": 0
+    }
+}
+    },"req_check-out-booki--100974033": {
+        "type": "REQUEST",
+        "name": "Check out Booking",
+"path": "Check out Booking",
+"pathFormatted": "req_check-out-booki--100974033",
+"stats": {
+    "name": "Check out Booking",
+    "numberOfRequests": {
+        "total": 1217,
+        "ok": 1217,
+        "ko": 0
+    },
+    "minResponseTime": {
+        "total": 4,
+        "ok": 4,
+        "ko": 0
+    },
+    "maxResponseTime": {
+        "total": 12,
+        "ok": 12,
+        "ko": 0
+    },
+    "meanResponseTime": {
+        "total": 5,
+        "ok": 5,
+        "ko": 0
+    },
+    "standardDeviation": {
+        "total": 1,
+        "ok": 1,
+        "ko": 0
+    },
+    "percentiles1": {
+        "total": 5,
+        "ok": 5,
+        "ko": 0
+    },
+    "percentiles2": {
+        "total": 6,
+        "ok": 6,
+        "ko": 0
+    },
+    "percentiles3": {
+        "total": 6,
+        "ok": 6,
+        "ko": 0
+    },
+    "percentiles4": {
+        "total": 7,
+        "ok": 7,
+        "ko": 0
+    },
+    "group1": {
+    "name": "t < 800 ms",
+    "htmlName": "t < 800 ms",
+    "count": 1217,
+    "percentage": 100.0
+},
+    "group2": {
+    "name": "800 ms <= t < 1200 ms",
+    "htmlName": "t >= 800 ms <br> t < 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group3": {
+    "name": "t >= 1200 ms",
+    "htmlName": "t >= 1200 ms",
+    "count": 0,
+    "percentage": 0.0
+},
+    "group4": {
+    "name": "failed",
+    "htmlName": "failed",
+    "count": 0,
+    "percentage": 0.0
+},
+    "meanNumberOfRequestsPerSecond": {
+        "total": 39.25806451612903,
+        "ok": 39.25806451612903,
+        "ko": 0
+    }
+}
+    }
+}
+
+}

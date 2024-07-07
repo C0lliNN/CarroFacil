@@ -9,3 +9,11 @@ variable "booking_service_db_password" {
 variable "jwt_secret" {
     description = "The secret for the JWT token"
 }
+
+variable "employee_email" {
+    description = "The email of the employee"
+}
+
+variable "employee_password" {
+    description = "The password of the employee"
+}

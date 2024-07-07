@@ -1,17 +1,17 @@
 resource "aws_ecs_task_definition" "user_management_task" {
-  family                   = "user_management"
-  network_mode             = "awsvpc"
+  family             = "user_management"
+  network_mode       = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 1024
-  memory                   = 2048
-  execution_role_arn       = aws_iam_role.task_definition_execution_role.arn
-  task_role_arn            = aws_iam_role.task_definition_task_role.arn
+  cpu                = 1024
+  memory             = 2048
+  execution_role_arn = aws_iam_role.task_definition_execution_role.arn
+  task_role_arn      = aws_iam_role.task_definition_task_role.arn
 
   container_definitions = jsonencode([
     {
-      name         = "user_management"
-      image        = "c0lllinn/cf-user-management:latest"
-      essential    = true
+      name      = "user_management"
+      image     = "c0lllinn/cf-user-management:latest"
+      essential = true
       portMappings = [
         {
           containerPort = 80
@@ -51,6 +51,14 @@ resource "aws_ecs_task_definition" "user_management_task" {
           name  = "JWT_SECRET"
           value = var.jwt_secret
         },
+        {
+          name  = "EMPLOYEE_EMAIL"
+          value = var.employee_email
+        },
+        {
+          name  = "EMPLOYEE_PASSWORD"
+          value = var.employee_password
+        }
       ]
 
       logConfiguration = {
@@ -74,7 +82,7 @@ resource "aws_ecs_service" "user_management_service" {
 
   network_configuration {
     subnets          = var.subnet_ids
-    security_groups  = [var.security_group_id]
+    security_groups = [var.security_group_id]
     assign_public_ip = true
   }
 

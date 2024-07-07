@@ -39,6 +39,18 @@ resource "aws_ecs_task_definition" "booking_service_task" {
         {
           name  = "SPRING_PROFILES_ACTIVE"
           value = "prod"
+        },
+        {
+            name = "INVENTORYMANAGEMENT_CLIENT_BASEURL"
+            value = "http://${module.inventory_management_alb.alb_dns_name}"
+        },
+        {
+          name = "AUTH_AUTHORIZATIONSERVER_URL"
+          value = "http://${module.user_management_alb.alb_dns_name}/auth/validate"
+        },
+        {
+            name = "SNS_TOPIC_BOOKINGS"
+            value = var.aws_sns_topic_bookings
         }
       ]
 

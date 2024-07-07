@@ -54,6 +54,9 @@ module "ecs" {
   inventory_management_log_group_name = module.cloudwatch.inventory_management_log_group_name
   booking_service_log_group_name      = module.cloudwatch.booking_log_group_name
   vpc_id                              = module.network.vpc_id
+  employee_email                      = var.employee_email
+  employee_password                   = var.employee_password
+  aws_sns_topic_bookings              = module.messaging.bookings_topic
 }
 
 

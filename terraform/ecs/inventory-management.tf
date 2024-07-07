@@ -38,6 +38,10 @@ resource "aws_ecs_task_definition" "inventory_management_task" {
         {
           name  = "SPRING_PROFILES_ACTIVE"
           value = "prod"
+        },
+        {
+          name = "AUTH_AUTHORIZATIONSERVER_URL"
+          value = "http://${module.user_management_alb.alb_dns_name}/auth/validate"
         }
       ]
 
