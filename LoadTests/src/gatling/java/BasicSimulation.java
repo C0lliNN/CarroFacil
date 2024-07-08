@@ -5,7 +5,6 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -16,10 +15,15 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
 public class BasicSimulation extends Simulation {
-    private final String AUTH_BASE_URL = "token";
-    private final String INVENTORY_BASE_URL = "http://localhost:8081";
-    private final String BOOKING_BASE_URL = "http://localhost:8082";
-    private final String EMPLOYEE_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiRW1wbG95ZWUiLCJpZCI6ImM1YmMxNzgzLTlkZDAtNGNkMS04ZDgyLTVkMDhiMTBjNGE1MiIsInR5cGUiOiJFTVBMT1lFRSIsImVtYWlsIjoiZW1wbG95ZWVAdGVzdC5jb20iLCJpYXQiOjE3MjAzNzY1MzgsImV4cCI6MTcyMDQ2MjkzOH0.7Wka0hlLdOM243L14CEfhGN7ICGFqcYrgkEkcm5ADcAcqb8TLcrhisZxcPwD8uZItgnuBgP3GezPTRuqwbmjxw";
+    private final String AUTH_BASE_URL = "http://user-management-alb-1338286536.us-east-1.elb.amazonaws.com/auth";
+    private final String INVENTORY_BASE_URL = "http://inventory-management-alb-849344746.us-east-1.elb.amazonaws.com";
+    private final String BOOKING_BASE_URL = "http://booking-service-alb-1157582990.us-east-1.elb.amazonaws.com";
+    private final String EMPLOYEE_TOKEN = "token";
+
+    private final int NUM_USERS = 100;
+    private final int RAMP_UP_TIME = 30;
+
+    // 14:39
 
     Faker faker = new Faker();
 
@@ -50,11 +54,11 @@ public class BasicSimulation extends Simulation {
             .feed(feeder)
             .exec(
                     http("Register")
-                        .post(AUTH_BASE_URL + "/register")
-                        .header("Content-Type", "application/json")
-                        .body(StringBody("{\"name\": \"#{name}\", \"email\": \"#{email}\", \"password\": \"#{password}\"}"))
-                    .check(status().is(201))
-                    .check(jsonPath("$.token").saveAs("token")))
+                            .post(AUTH_BASE_URL + "/register")
+                            .header("Content-Type", "application/json")
+                            .body(StringBody("{\"name\": \"#{name}\", \"email\": \"#{email}\", \"password\": \"#{password}\"}"))
+                            .check(status().is(201))
+                            .check(jsonPath("$.token").saveAs("token")))
             .exec(http("Create Vehicle")
                     .put(INVENTORY_BASE_URL + "/vehicles")
                     .header("Content-Type", "application/json")
@@ -87,11 +91,8 @@ public class BasicSimulation extends Simulation {
     {
         setUp(
                 registerScenario.injectClosed(
-                        incrementConcurrentUsers(10)
-                                .times(2)
-                                .eachLevelLasting(Duration.ofSeconds(10))
-                                .separatedByRampsLasting(Duration.ofSeconds(5))
-                                .startingFrom(0))
+                        rampConcurrentUsers(0).to(NUM_USERS).during(Duration.ofMinutes(RAMP_UP_TIME))
+                )
         ).protocols(httpProtocol);
     }
 
