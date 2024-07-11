@@ -23,8 +23,6 @@ public class BasicSimulation extends Simulation {
     private final int NUM_USERS = 100;
     private final int RAMP_UP_TIME = 30;
 
-    // 14:39
-
     Faker faker = new Faker();
 
     Set<String> emails = Collections.synchronizedSet(new HashSet<>());
