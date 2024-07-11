@@ -14,22 +14,6 @@ import java.util.List;
 public class InventoryManagementController {
     private final InventoryService service;
 
-    @PutMapping("/stores")
-    public StoreResponse saveStore(@RequestBody @Valid SaveStoreRequest request) {
-        checkAuthorization();
-
-        return service.saveStore(request);
-    }
-
-    @GetMapping("/stores")
-    public List<StoreResponse> getStores() {
-        return service.getStores();
-    }
-
-    @GetMapping("/stores/{storeId}/vehicle-types")
-    public List<VehicleTypeResponse> getVehicleTypesByStore(@PathVariable int storeId) {
-        return service.getVehicleTypesByStore(storeId);
-    }
 
     @PutMapping("/vehicle-types")
     public VehicleTypeResponse saveVehicleType(@RequestBody @Valid SaveVehicleTypeRequest request) {

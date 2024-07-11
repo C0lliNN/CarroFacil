@@ -1,13 +1,11 @@
 package com.raphaelcollin.inventorymanagement.core.service;
 
-import com.raphaelcollin.inventorymanagement.core.Store;
 import com.raphaelcollin.inventorymanagement.core.Vehicle;
 import com.raphaelcollin.inventorymanagement.core.VehicleStatus;
 
 public record VehicleResponse(
         int id,
         VehicleTypeResponse type,
-        Store store,
         String make,
         String model,
         int year,
@@ -22,7 +20,6 @@ public record VehicleResponse(
         return new VehicleResponse(
                 vehicle.getId(),
                 VehicleTypeResponse.fromVehicleType(vehicle.getType()),
-                vehicle.getStore(),
                 vehicle.getMake(),
                 vehicle.getModel(),
                 vehicle.getYear(),

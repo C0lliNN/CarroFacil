@@ -25,68 +25,6 @@ class InventoryServiceTest {
     @Mock
     private VehicleRepository vehicleRepository;
 
-    @Mock
-    private StoreRepository storeRepository;
-
-    @Nested
-    @DisplayName("method: saveStore(SaveStoreRequest)")
-    class SaveStoreMethod {
-
-        @Test
-        @DisplayName("when called, then it should save the store and return a StoreResponse")
-        void whenCalled_thenItShouldSaveTheStoreAndReturnAStoreResponse() {
-            SaveStoreRequest request = new SaveStoreRequest(1, "Store 1", "Address 1", "2342342", 24, 88);
-            when(storeRepository.save(Mockito.any())).thenReturn(request.toStore());
-
-            StoreResponse response = inventoryService.saveStore(request);
-
-            assertEquals(StoreResponse.fromStore(request.toStore()), response);
-            verify(storeRepository).save(Mockito.any());
-        }
-    }
-
-    @Nested
-    @DisplayName("method: getStores()")
-    class GetStoresMethod {
-
-        @Test
-        @DisplayName("when called, then it should return a list of StoreResponse")
-        void whenCalled_thenItShouldReturnAListOfStoreResponse() {
-            Store store1 = new SaveStoreRequest(1, "Store 1", "Address 1", "2342342", 24, 88).toStore();
-            Store store2 = new SaveStoreRequest(2, "Store 2", "Address 2", "2342342", 24, 88).toStore();
-            when(storeRepository.findAll()).thenReturn(List.of(store1, store2));
-
-            StoreResponse response1 = StoreResponse.fromStore(store1);
-            StoreResponse response2 = StoreResponse.fromStore(store2);
-
-            List<StoreResponse> responses = inventoryService.getStores();
-
-            assertEquals(List.of(response1, response2), responses);
-            verify(storeRepository).findAll();
-        }
-    }
-
-    @Nested
-    @DisplayName("method: getVehicleTypesByStore(int)")
-    class GetVehicleTypesByStoreMethod {
-
-        @Test
-        @DisplayName("when called, then it should return a list of VehicleTypeResponse")
-        void whenCalled_thenItShouldReturnAListOfVehicleTypeResponse() {
-            VehicleType type1 = new VehicleType(1, "Hyundai",  VehicleCategory.HATCH);
-            VehicleType type2 = new VehicleType(2, "Chevrolet",  VehicleCategory.HATCH);
-            when(vehicleRepository.getVehicleTypesByStore(1)).thenReturn(List.of(type1, type2));
-
-            VehicleTypeResponse response1 = VehicleTypeResponse.fromVehicleType(type1);
-            VehicleTypeResponse response2 = VehicleTypeResponse.fromVehicleType(type2);
-
-            List<VehicleTypeResponse> responses = inventoryService.getVehicleTypesByStore(1);
-
-            assertEquals(List.of(response1, response2), responses);
-            verify(vehicleRepository).getVehicleTypesByStore(1);
-        }
-    }
-
     @Nested
     @DisplayName("method: saveVehicleType(SaveVehicleTypeRequest)")
     class SaveVehicleTypeMethod {
@@ -112,8 +50,7 @@ class InventoryServiceTest {
         @DisplayName("when called, then it should return a list of VehicleResponse")
         void whenCalled_thenItShouldReturnAListOfVehicleResponse() {
             VehicleType type = new VehicleType(1, "Hyundai", VehicleCategory.HATCH);
-            Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
-            Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2020, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(1, type, "Hyundai", "HB20", 2020, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
             when(vehicleRepository.findVehiclesByType(1)).thenReturn(List.of(vehicle));
 
             VehicleResponse response = VehicleResponse.fromVehicle(vehicle);
@@ -130,27 +67,12 @@ class InventoryServiceTest {
     class SaveVehicleMethod {
 
         @Test
-        @DisplayName("when store is not found, then it should throw an EntityNotFoundException")
-        void whenStoreIsNotFound_thenItShouldThrowAnEntityNotFoundException() {
-            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, "Hyundai", "HB20", 2020, 0, "ABC1234", "123456", "654321", "Black");
-            when(storeRepository.findById(1)).thenReturn(java.util.Optional.empty());
-
-            assertThrows(EntityNotFoundException.class, () -> inventoryService.saveVehicle(request));
-            verify(storeRepository).findById(1);
-            verify(vehicleRepository, never()).findVehicleTypeById(1);
-            verify(vehicleRepository, never()).saveVehicle(Mockito.any());
-        }
-
-        @Test
         @DisplayName("when vehicle type is not found, then it should throw an EntityNotFoundException")
         void whenVehicleTypeIsNotFound_thenItShouldThrowAnEntityNotFoundException() {
-            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, "Hyundai", "HB20", 2020,0, "ABC1234", "123456", "654321", "Black");
-            Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
-            when(storeRepository.findById(1)).thenReturn(java.util.Optional.of(store));
+            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, "Hyundai", "HB20", 2020,0, "ABC1234", "123456", "654321", "Black");
             when(vehicleRepository.findVehicleTypeById(1)).thenReturn(java.util.Optional.empty());
 
             assertThrows(EntityNotFoundException.class, () -> inventoryService.saveVehicle(request));
-            verify(storeRepository).findById(1);
             verify(vehicleRepository).findVehicleTypeById(1);
             verify(vehicleRepository, never()).saveVehicle(Mockito.any());
         }
@@ -158,18 +80,15 @@ class InventoryServiceTest {
         @Test
         @DisplayName("when called, then it should save the vehicle and return a VehicleResponse")
         void whenCalled_thenItShouldSaveTheVehicleAndReturnAVehicleResponse() {
-            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, 1, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black");
-            Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
+            SaveVehicleRequest request = new SaveVehicleRequest(1, 1, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black");
             VehicleType type = new VehicleType(1, "Compact Hatch", VehicleCategory.HATCH);
-            Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
-            when(storeRepository.findById(1)).thenReturn(java.util.Optional.of(store));
+            Vehicle vehicle = new Vehicle(1, type, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
             when(vehicleRepository.findVehicleTypeById(1)).thenReturn(java.util.Optional.of(type));
             when(vehicleRepository.saveVehicle(Mockito.any())).thenReturn(vehicle);
 
             VehicleResponse response = inventoryService.saveVehicle(request);
 
             assertEquals(VehicleResponse.fromVehicle(vehicle), response);
-            verify(storeRepository).findById(1);
             verify(vehicleRepository).findVehicleTypeById(1);
             verify(vehicleRepository).saveVehicle(Mockito.any());
         }
@@ -192,9 +111,7 @@ class InventoryServiceTest {
         @DisplayName("when called, then it should return a VehicleResponse")
         void whenCalled_thenItShouldReturnAVehicleResponse() {
             VehicleType type = new VehicleType(1, "Compact Hatch", VehicleCategory.HATCH);
-            Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
-
-            Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(1, type, "Hyundai", "HB20", 2021, 0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
             when(vehicleRepository.findById(1)).thenReturn(java.util.Optional.of(vehicle));
 
             VehicleResponse response = inventoryService.getVehicleById(1);
@@ -222,9 +139,8 @@ class InventoryServiceTest {
         @DisplayName("when called, then it should book the vehicle")
         void whenCalled_thenItShouldBookTheVehicle() {
             VehicleType type = new VehicleType(1, "Compact Hatch", VehicleCategory.HATCH);
-            Store store = new Store(1, "Store 1", "Address 1", "2342342", 24, 88);
 
-            Vehicle vehicle = new Vehicle(1, type, store, "Hyundai", "HB20", 2021,  0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(1, type, "Hyundai", "HB20", 2021,  0, "ABC1234", "123456", "654321", "Black", VehicleStatus.AVAILABLE);
             when(vehicleRepository.findById(1)).thenReturn(java.util.Optional.of(vehicle));
 
             inventoryService.bookVehicle(1);

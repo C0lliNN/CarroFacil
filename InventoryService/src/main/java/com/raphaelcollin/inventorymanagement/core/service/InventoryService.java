@@ -12,21 +12,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class InventoryService {
-    private final StoreRepository storeRepository;
     private final VehicleRepository vehicleRepository;
-
-    public StoreResponse saveStore(SaveStoreRequest request) {
-        return StoreResponse.fromStore(storeRepository.save(request.toStore()));
-    }
-
-    public List<StoreResponse> getStores() {
-        return storeRepository.findAll().stream().map(StoreResponse::fromStore).toList();
-    }
-
-    public List<VehicleTypeResponse> getVehicleTypesByStore(int storeId) {
-        return vehicleRepository.getVehicleTypesByStore(storeId).stream()
-                .map(VehicleTypeResponse::fromVehicleType).toList();
-    }
 
     public VehicleTypeResponse saveVehicleType(SaveVehicleTypeRequest request) {
         return VehicleTypeResponse.fromVehicleType(vehicleRepository.saveVehicleType(request.toVehicleType()));
@@ -43,13 +29,10 @@ public class InventoryService {
     }
 
     public VehicleResponse saveVehicle(SaveVehicleRequest request) {
-        Store store = storeRepository.findById(request.storeId())
-                .orElseThrow(() -> new EntityNotFoundException("Store not found"));
-
         VehicleType type = vehicleRepository.findVehicleTypeById(request.typeId())
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle type not found"));
 
-        return VehicleResponse.fromVehicle(vehicleRepository.saveVehicle(request.toVehicle(store, type)));
+        return VehicleResponse.fromVehicle(vehicleRepository.saveVehicle(request.toVehicle(type)));
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

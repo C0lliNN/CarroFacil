@@ -17,62 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class InventoryManagementControllerTest extends IntegrationTest {
 
     @Autowired
-    private StoreRepository storeRepository;
-
-    @Autowired
     private VehicleRepository vehicleRepository;
-
-    @Nested
-    @DisplayName("GET /stores")
-    class GetStores {
-
-        @Test
-        @DisplayName("When user is authenticated, then it should return a list of stores")
-        void whenUserIsAuthenticatedShouldReturnStores() throws Exception {
-            Store store1 = new Store(0, "Name 1", "Address 1", "234242", 24, 46);
-            Store store2 = new Store(0, "Name 2", "Address 2", "234243", 25, 47);
-
-            store1 = storeRepository.save(store1);
-            store2 = storeRepository.save(store2);
-
-            mockMvc.perform(get("/stores").header("Authorization", "Bearer valid"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].id").value(store1.getId()))
-                    .andExpect(jsonPath("$[0].name").value(store1.getName()))
-                    .andExpect(jsonPath("$[0].address").value(store1.getAddress()))
-                    .andExpect(jsonPath("$[0].latitude").value(store1.getLatitude()))
-                    .andExpect(jsonPath("$[0].longitude").value(store1.getLongitude()))
-                    .andExpect(jsonPath("$[1].id").value(store2.getId()))
-                    .andExpect(jsonPath("$[1].name").value(store2.getName()))
-                    .andExpect(jsonPath("$[1].address").value(store2.getAddress()))
-                    .andExpect(jsonPath("$[1].latitude").value(store2.getLatitude()))
-                    .andExpect(jsonPath("$[1].longitude").value(store2.getLongitude()));
-        }
-    }
-
-    @Nested
-    @DisplayName("PUT /stores")
-    class PutStores {
-
-        @Test
-        @WithMockEmployee
-        @DisplayName("when request is not valid, then it should return 400")
-        void whenRequestIsNotValidShouldReturn400() throws Exception {
-            mockMvc.perform(put("/stores").contentType("application/json").content("{}"))
-                    .andExpect(status().isBadRequest());
-        }
-
-        @Test
-        @WithMockEmployee
-        @DisplayName("when request is valid, then it should return 200")
-        void whenRequestIsValidShouldReturn200() throws Exception {
-            mockMvc.perform(put("/stores").contentType("application/json")
-                            .content("{\"name\":\"Name\",\"phoneNumber\":\"252342\",\"address\":\"Address\",\"latitude\":24,\"longitude\":46}"))
-                    .andExpect(status().isOk());
-
-            assertEquals(1, storeRepository.findAll().size());
-        }
-    }
 
     @Nested
     @DisplayName("PUT /vehicle-types")
@@ -97,53 +42,6 @@ class InventoryManagementControllerTest extends IntegrationTest {
     }
 
     @Nested
-    @DisplayName("GET /stores/{storeId}/vehicle-types")
-    class GetVehicleTypesByStore {
-
-        @Test
-        @DisplayName("when store does not have vehicle types, then it should return an empty list")
-        void whenStoreDoesNotHaveVehicleTypesShouldReturnEmptyList() throws Exception {
-            Store store = new Store(0, "Name", "Address", "234242", 24, 46);
-            store = storeRepository.save(store);
-
-            mockMvc.perform(get("/stores/" + store.getId() + "/vehicle-types").header("Authorization", "Bearer valid"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$").isEmpty());
-        }
-
-
-        @Test
-        @DisplayName("when store exists, then it should return a list of vehicle types")
-        void whenStoreExistsShouldReturnVehicleTypes() throws Exception {
-            VehicleType vehicleType1 = new VehicleType(0, "Vehicle Type 1", VehicleCategory.HATCH);
-            VehicleType vehicleType2 = new VehicleType(0, "Vehicle Type 2", VehicleCategory.SUV);
-            VehicleType vehicleType3 = new VehicleType(0, "Vehicle Type 3", VehicleCategory.SEDAN);
-
-            vehicleType1 = vehicleRepository.saveVehicleType(vehicleType1);
-            vehicleType2 = vehicleRepository.saveVehicleType(vehicleType2);
-            vehicleRepository.saveVehicleType(vehicleType3);
-
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = storeRepository.save(store);
-
-            Vehicle vehicle1 = new Vehicle(0, vehicleType1, store, "Make 1", "Model 1", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
-            Vehicle vehicle2 = new Vehicle(0, vehicleType2, store, "Make 2", "Model 2", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
-
-            vehicleRepository.saveVehicle(vehicle1);
-            vehicleRepository.saveVehicle(vehicle2);
-
-            mockMvc.perform(get("/stores/" + store.getId() + "/vehicle-types").header("Authorization", "Bearer valid"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].id").value(vehicleType1.getId()))
-                    .andExpect(jsonPath("$[0].name").value(vehicleType1.getName()))
-                    .andExpect(jsonPath("$[0].category").value(vehicleType1.getCategory().name()))
-                    .andExpect(jsonPath("$[1].id").value(vehicleType2.getId()))
-                    .andExpect(jsonPath("$[1].name").value(vehicleType2.getName()))
-                    .andExpect(jsonPath("$[1].category").value(vehicleType2.getCategory().name()));
-        }
-    }
-
-    @Nested
     @DisplayName("GET /vehicle-types/{typeId}/vehicles")
     class GetVehiclesByType {
 
@@ -164,11 +62,8 @@ class InventoryManagementControllerTest extends IntegrationTest {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
             vehicleType = vehicleRepository.saveVehicleType(vehicleType);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = storeRepository.save(store);
-
-            Vehicle vehicle1 = new Vehicle(0, vehicleType, store, "Make 1", "Model 1", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
-            Vehicle vehicle2 = new Vehicle(0, vehicleType, store, "Make 2", "Model 2", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle1 = new Vehicle(0, vehicleType, "Make 1", "Model 1", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle2 = new Vehicle(0, vehicleType, "Make 2", "Model 2", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
 
             vehicleRepository.saveVehicle(vehicle1);
             vehicleRepository.saveVehicle(vehicle2);
@@ -211,12 +106,8 @@ class InventoryManagementControllerTest extends IntegrationTest {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
             vehicleType = vehicleRepository.saveVehicleType(vehicleType);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = storeRepository.save(store);
-
             SaveVehicleRequest request = new SaveVehicleRequest(
                     vehicleType.getId(),
-                    store.getId(),
                     vehicleType.getId(),
                     "Make",
                     "Model",
@@ -229,7 +120,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
             );
 
             mockMvc.perform(put("/vehicles").contentType("application/json")
-                            .content("{\"typeId\":" + request.typeId() + ",\"storeId\":" + request.storeId() + ",\"make\":\"" + request.make() + "\",\"model\":\"" + request.model() + "\",\"year\":" + request.year() + ",\"mileage\":" + request.mileage() + ",\"licensePlate\":\"" + request.licensePlate() + "\",\"chassisNumber\":\"" + request.chassisNumber() + "\",\"engineNumber\":\"" + request.engineNumber() + "\",\"color\":\"" + request.color() + "\"}"))
+                            .content("{\"typeId\":" + request.typeId() + ",\"make\":\"" + request.make() + "\",\"model\":\"" + request.model() + "\",\"year\":" + request.year() + ",\"mileage\":" + request.mileage() + ",\"licensePlate\":\"" + request.licensePlate() + "\",\"chassisNumber\":\"" + request.chassisNumber() + "\",\"engineNumber\":\"" + request.engineNumber() + "\",\"color\":\"" + request.color() + "\"}"))
                     .andExpect(status().isOk());
         }
     }
@@ -251,10 +142,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
             vehicleType = vehicleRepository.saveVehicleType(vehicleType);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = storeRepository.save(store);
-
-            Vehicle vehicle = new Vehicle(0, vehicleType, store, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(0, vehicleType, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
             vehicle = vehicleRepository.saveVehicle(vehicle);
 
             mockMvc.perform(get("/vehicles/" + vehicle.getId()).header("Authorization", "Bearer valid"))
@@ -279,10 +167,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
             vehicleType = vehicleRepository.saveVehicleType(vehicleType);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = storeRepository.save(store);
-
-            Vehicle vehicle = new Vehicle(0, vehicleType, store, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.UNAVAILABLE);
+            Vehicle vehicle = new Vehicle(0, vehicleType, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.UNAVAILABLE);
             vehicle = vehicleRepository.saveVehicle(vehicle);
 
             mockMvc.perform(patch("/vehicles/" + vehicle.getId() + "/book").header("Authorization", "Bearer valid"))
@@ -295,10 +180,7 @@ class InventoryManagementControllerTest extends IntegrationTest {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
             vehicleType = vehicleRepository.saveVehicleType(vehicleType);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = storeRepository.save(store);
-
-            Vehicle vehicle = new Vehicle(0, vehicleType, store, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(0, vehicleType, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
             vehicle = vehicleRepository.saveVehicle(vehicle);
 
             mockMvc.perform(patch("/vehicles/" + vehicle.getId() + "/book").header("Authorization", "Bearer valid"))

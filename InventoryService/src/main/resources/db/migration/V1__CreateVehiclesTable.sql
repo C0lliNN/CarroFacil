@@ -7,7 +7,6 @@ CREATE TABLE vehicle_types (
 CREATE TABLE vehicles (
     id SERIAL PRIMARY KEY,
     type_id INT NOT NULL,
-    store_id INT NOT NULL,
     make VARCHAR(50) NOT NULL,
     model VARCHAR(50) NOT NULL,
     year INT NOT NULL,
@@ -17,6 +16,5 @@ CREATE TABLE vehicles (
     engine_number VARCHAR(50) NOT NULL,
     color VARCHAR(50) NOT NULL,
     status VARCHAR(50) NOT NULL,
-    FOREIGN KEY (type_id) REFERENCES vehicle_types (id) ON DELETE CASCADE,
-    FOREIGN KEY (store_id) REFERENCES stores (id) ON DELETE CASCADE
+    FOREIGN KEY (type_id) REFERENCES vehicle_types (id) ON DELETE CASCADE
 );

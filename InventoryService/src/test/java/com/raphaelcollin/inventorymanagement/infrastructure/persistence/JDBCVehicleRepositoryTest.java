@@ -16,9 +16,6 @@ class JDBCVehicleRepositoryTest extends IntegrationTest {
     @Autowired
     private JDBCVehicleRepository jdbcVehicleRepository;
 
-    @Autowired
-    private JDBCStoreRepository jdbcStoreRepository;
-
     @Nested
     @DisplayName("saveVehicleType method")
     class SaveVehicleTypeMethod {
@@ -73,43 +70,6 @@ class JDBCVehicleRepositoryTest extends IntegrationTest {
         }
     }
 
-    @Nested
-    @DisplayName("findVehicleTypesByStore method")
-    class FindVehicleTypesByStoreMethod {
-
-        @Test
-        @DisplayName("when called with an existing store id, then it should return all vehicle types")
-        void whenCalledWithAnExistingStoreId_thenItShouldReturnAllVehicleTypes() {
-            VehicleType vehicleType1 = new VehicleType(0, "Vehicle Type 1", VehicleCategory.HATCH);
-            VehicleType vehicleType2 = new VehicleType(0, "Vehicle Type 2", VehicleCategory.SUV);
-            VehicleType vehicleType3 = new VehicleType(0, "Vehicle Type 3", VehicleCategory.SEDAN);
-
-            vehicleType1 = jdbcVehicleRepository.saveVehicleType(vehicleType1);
-            vehicleType2 = jdbcVehicleRepository.saveVehicleType(vehicleType2);
-            jdbcVehicleRepository.saveVehicleType(vehicleType3);
-
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = jdbcStoreRepository.save(store);
-
-            Vehicle vehicle1 = new Vehicle(0, vehicleType1, store, "Make 1", "Model 1", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
-            Vehicle vehicle2 = new Vehicle(0, vehicleType2, store, "Make 2", "Model 2", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
-
-            jdbcVehicleRepository.saveVehicle(vehicle1);
-            jdbcVehicleRepository.saveVehicle(vehicle2);
-
-            List<VehicleType> vehicleTypes = jdbcVehicleRepository.getVehicleTypesByStore(store.getId());
-
-            assertEquals(2, vehicleTypes.size());
-            assertEquals(vehicleType1.getId(), vehicleTypes.get(0).getId());
-            assertEquals(vehicleType2.getId(), vehicleTypes.get(1).getId());
-        }
-
-        @Test
-        @DisplayName("when called with a non-existing store id, then it should return an empty list")
-        void whenCalledWithANonExistingStoreId_thenItShouldReturnAnEmptyList() {
-            assertTrue(jdbcVehicleRepository.getVehicleTypesByStore(1).isEmpty());
-        }
-    }
 
     @Nested
     @DisplayName("findById method")
@@ -121,10 +81,7 @@ class JDBCVehicleRepositoryTest extends IntegrationTest {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
             vehicleType = jdbcVehicleRepository.saveVehicleType(vehicleType);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = jdbcStoreRepository.save(store);
-
-            Vehicle vehicle = new Vehicle(0, vehicleType, store, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(0, vehicleType, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
             Vehicle savedVehicle = jdbcVehicleRepository.saveVehicle(vehicle);
 
             assertTrue(jdbcVehicleRepository.findById(savedVehicle.getId()).isPresent());
@@ -151,11 +108,8 @@ class JDBCVehicleRepositoryTest extends IntegrationTest {
             VehicleType vehicleType2 = new VehicleType(0, "Vehicle Type 2", VehicleCategory.SUV);
             vehicleType2 = jdbcVehicleRepository.saveVehicleType(vehicleType2);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = jdbcStoreRepository.save(store);
-
-            Vehicle vehicle1 = new Vehicle(0, vehicleType, store, "Make 1", "Model 1", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
-            Vehicle vehicle2 = new Vehicle(0, vehicleType2, store, "Make 2", "Model 2", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle1 = new Vehicle(0, vehicleType, "Make 1", "Model 1", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle2 = new Vehicle(0, vehicleType2, "Make 2", "Model 2", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
 
             vehicle1 = jdbcVehicleRepository.saveVehicle(vehicle1);
            jdbcVehicleRepository.saveVehicle(vehicle2);
@@ -183,16 +137,12 @@ class JDBCVehicleRepositoryTest extends IntegrationTest {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
             vehicleType = jdbcVehicleRepository.saveVehicleType(vehicleType);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = jdbcStoreRepository.save(store);
-
-            Vehicle vehicle = new Vehicle(0, vehicleType, store, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(0, vehicleType, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
 
             Vehicle savedVehicle = jdbcVehicleRepository.saveVehicle(vehicle);
 
             assertNotEquals(0, savedVehicle.getId());
             assertEquals(vehicleType.getId(), savedVehicle.getType().getId());
-            assertEquals(store.getId(), savedVehicle.getStore().getId());
             assertEquals(vehicle.getMake(), savedVehicle.getMake());
             assertEquals(vehicle.getModel(), savedVehicle.getModel());
             assertEquals(vehicle.getYear(), savedVehicle.getYear());
@@ -211,10 +161,7 @@ class JDBCVehicleRepositoryTest extends IntegrationTest {
             VehicleType vehicleType = new VehicleType(0, "Vehicle Type", VehicleCategory.HATCH);
             vehicleType = jdbcVehicleRepository.saveVehicleType(vehicleType);
 
-            Store store = new Store(0, "Store", "Address", "123456789", 0L, 0L);
-            store = jdbcStoreRepository.save(store);
-
-            Vehicle vehicle = new Vehicle(0, vehicleType, store, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
+            Vehicle vehicle = new Vehicle(0, vehicleType, "Make", "Model", 2020, 0, "ABC1234", "123456", "123456", "Black", VehicleStatus.AVAILABLE);
             Vehicle savedVehicle = jdbcVehicleRepository.saveVehicle(vehicle);
 
             savedVehicle.setMake("Updated Make");
@@ -231,7 +178,6 @@ class JDBCVehicleRepositoryTest extends IntegrationTest {
 
             assertEquals(savedVehicle.getId(), updatedVehicle.getId());
             assertEquals(savedVehicle.getType().getId(), updatedVehicle.getType().getId());
-            assertEquals(savedVehicle.getStore().getId(), updatedVehicle.getStore().getId());
             assertEquals(savedVehicle.getMake(), updatedVehicle.getMake());
             assertEquals(savedVehicle.getModel(), updatedVehicle.getModel());
             assertEquals(savedVehicle.getYear(), updatedVehicle.getYear());

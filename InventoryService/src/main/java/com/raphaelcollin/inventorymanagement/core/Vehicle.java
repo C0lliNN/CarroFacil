@@ -14,7 +14,6 @@ import lombok.Setter;
 public class Vehicle {
     private int id;
     private VehicleType type;
-    private Store store;
     private String make;
     private String model;
     private int year;

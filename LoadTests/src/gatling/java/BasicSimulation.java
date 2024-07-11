@@ -61,7 +61,7 @@ public class BasicSimulation extends Simulation {
                     .put(INVENTORY_BASE_URL + "/vehicles")
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + EMPLOYEE_TOKEN)
-                    .body(StringBody("{\"typeId\":1,\"storeId\":1,\"make\":\"Hyundai\",\"model\":\"Creta\",\"year\":2024,\"mileage\":10000,\"licensePlate\":\"23525\",\"chassisNumber\":\"252355125\",\"engineNumber\":\"234242\",\"color\":\"white\"}"))
+                    .body(StringBody("{\"typeId\":1,\"make\":\"Hyundai\",\"model\":\"Creta\",\"year\":2024,\"mileage\":10000,\"licensePlate\":\"23525\",\"chassisNumber\":\"252355125\",\"engineNumber\":\"234242\",\"color\":\"white\"}"))
                     .check(status().is(200))
                     .check(jsonPath("$.id").saveAs("vehicleId")))
             .exec(http("Book Vehicle")

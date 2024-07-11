@@ -27,7 +27,6 @@ class AuthorizationFilterTest {
                 "/swagger-ui,true",
                 "/actuator/health,true",
                 "/vehicles,false",
-                "/stores,false"
         })
         @DisplayName("when uri is whitelisted, then it should return true")
         void testShouldNotFilter(String uri, boolean expected) {

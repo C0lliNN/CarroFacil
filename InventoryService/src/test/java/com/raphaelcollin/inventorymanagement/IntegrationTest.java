@@ -81,7 +81,6 @@ public class IntegrationTest {
     void tearDown() {
         jdbcTemplate.update("DELETE FROM vehicles");
         jdbcTemplate.update("DELETE FROM vehicle_types");
-        jdbcTemplate.update("DELETE FROM stores");
     }
 
     @DynamicPropertySource
