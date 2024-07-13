@@ -15,9 +15,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.containers.GenericContainer;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
-import software.amazon.awssdk.services.sqs.SqsAsyncClient;
-
-import java.util.concurrent.ExecutionException;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration
@@ -33,9 +30,6 @@ public class IntegrationTest {
     protected DynamoDbClient dynamoDbClient;
 
     @Autowired
-    protected SqsAsyncClient sqsClient;
-
-    @Autowired
     protected WebApplicationContext webApplicationContext;
 
     protected MockMvc mockMvc;
@@ -44,7 +38,6 @@ public class IntegrationTest {
     protected void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         setupDynamoDB();
-        setupSQS();
     }
 
     private void setupDynamoDB() {
@@ -70,25 +63,17 @@ public class IntegrationTest {
         );
     }
 
-    private void setupSQS() {
-        try {
-            sqsClient.createQueue(r -> r.queueName("bookings")).get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @AfterEach
     void tearDown() {
         dynamoDbClient.deleteTable(r -> r.tableName("users"));
-        sqsClient.purgeQueue(r -> r.queueUrl("http://localhost:" + container.getMappedPort(4566) + "/000000000000/bookings"));
     }
 
     @DynamicPropertySource
     static void localstackProperties(DynamicPropertyRegistry registry) {
         container.start();
         registry.add("spring.cloud.aws.dynamodb.endpoint", () -> "http://localhost:" + container.getMappedPort(4566));
-        registry.add("spring.cloud.aws.sqs.endpoint",  () -> "http://localhost:" + container.getMappedPort(4566));
+        registry.add("spring.cloud.aws.sqs.endpoint", () -> "http://localhost:" + container.getMappedPort(4566));
 
     }
 }

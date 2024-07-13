@@ -21,7 +21,6 @@ class JwtTokenManagerTest {
         var user = User.builder()
                 .id(id)
                 .name(name)
-                .type(User.Type.valueOf(type))
                 .email(email)
                 .build();
 
@@ -32,6 +31,5 @@ class JwtTokenManagerTest {
         assertEquals(id, extractedUser.getId());
         assertEquals(name, extractedUser.getName());
         assertEquals(email, extractedUser.getEmail());
-        assertEquals(type, extractedUser.getType().name());
     }
 }

@@ -18,14 +18,8 @@ public class RestUserServiceClient implements UserServiceClient {
     private String endpoint;
 
     @Override
-    public User login(String email, String password) {
-        Map<String, String> body = Map.of("email", email, "password", password);
-        return restTemplate.postForObject(endpoint + "/login", body, User.class);
-    }
-
-    @Override
     public User register(String name, String email, String password) {
-        Map<String, String> body = Map.of("name", name, "email", email, "password", password);
+        Map<String, String> body = Map.of("name", name, "email", email, "password", password, "type", "CUSTOMER");
         return restTemplate.postForObject(endpoint + "/register", body, User.class);
     }
 }

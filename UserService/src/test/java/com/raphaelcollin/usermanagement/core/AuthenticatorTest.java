@@ -69,7 +69,6 @@ class AuthenticatorTest {
             User user = User.builder()
                     .id("some-id")
                     .name("some-name")
-                    .type(User.Type.CUSTOMER)
                     .email(request.email())
                     .password("some-hashed-password")
                     .build();
@@ -96,7 +95,6 @@ class AuthenticatorTest {
             User user = User.builder().
                     id("some-id")
                     .name("some-name")
-                    .type(User.Type.CUSTOMER)
                     .email(request.email())
                     .password("some-hashed-password")
                     .build();
@@ -127,11 +125,10 @@ class AuthenticatorTest {
         @Test
         @DisplayName("when called and the email is already in use, then it should throw a DuplicateEmailException")
         void whenCalledAndTheEmailIsAlreadyInUse_shouldThrowADuplicateEmailException() {
-            RegisterRequest request = new RegisterRequest("some-name", "some-email", "some-password");
+            RegisterRequest request = new RegisterRequest("some-name", "some-email", "some-password", "CUSTOMER");
             User existingUser = User.builder()
                     .id("some-id")
                     .name("some-name")
-                    .type(User.Type.CUSTOMER)
                     .email(request.email())
                     .password("some-hashed-password")
                     .build();
@@ -149,7 +146,7 @@ class AuthenticatorTest {
         @Test
         @DisplayName("when called, then it should register a new user")
         void whenCalled_shouldRegisterANewUser() {
-            RegisterRequest request = new RegisterRequest("some-name", "some-email", "some-password");
+            RegisterRequest request = new RegisterRequest("some-name", "some-email", "some-password", "EMPLOYEE");
             User user = request.toUser();
             user.setPassword("some-hashed-password");
 

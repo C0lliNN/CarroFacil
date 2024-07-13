@@ -10,17 +10,7 @@ import lombok.*;
 public class User {
     private String id;
     private String name;
-    private Type type;
+    private String type;
     private String email;
     private String password;
-    private int bookingsCount;
-
-    public void incrementBookingsCount() {
-        bookingsCount++;
-    }
-
-    public enum Type {
-        EMPLOYEE,
-        CUSTOMER
-    }
 }

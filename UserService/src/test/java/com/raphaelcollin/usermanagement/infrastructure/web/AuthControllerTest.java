@@ -22,10 +22,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 class AuthControllerTest extends IntegrationTest {
-    private static final String BASE_URL = "/auth";
+    private static final String BASE_URL = "";
     private final String NAME = "Raphael";
     private final String EMAIL = "test_auth2@test.com";
     private final String PASSWORD = "password";
+    private final String TYPE = "CUSTOMER";
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -44,9 +45,9 @@ class AuthControllerTest extends IntegrationTest {
 
         user = User.builder()
                 .name(NAME)
-                .type(User.Type.CUSTOMER)
                 .email(EMAIL)
                 .password(passwordEncoder.hashPassword(PASSWORD))
+                .type(TYPE)
                 .build();
     }
 
@@ -177,7 +178,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     null,
                     EMAIL,
-                    PASSWORD
+                    PASSWORD,
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -199,7 +201,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     "a".repeat(151),
                     EMAIL,
-                    PASSWORD
+                    PASSWORD,
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -221,7 +224,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     NAME,
                     "",
-                    PASSWORD
+                    PASSWORD,
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -243,7 +247,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     NAME,
                     "test.com",
-                    PASSWORD
+                    PASSWORD,
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -265,7 +270,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     NAME,
                     EMAIL,
-                    null
+                    null,
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -287,7 +293,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     NAME,
                     EMAIL,
-                    "test"
+                    "test",
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -309,7 +316,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     NAME,
                     EMAIL,
-                    PASSWORD
+                    PASSWORD,
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -333,9 +341,9 @@ class AuthControllerTest extends IntegrationTest {
         void whenCalledWithExistingEmail_shouldReturn409Error() throws Exception {
             User user = User.builder()
                     .name(NAME)
-                    .type(User.Type.CUSTOMER)
                     .email(EMAIL)
                     .password(PASSWORD)
+                    .type(TYPE)
                     .build();
 
             repository.save(user);
@@ -343,7 +351,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     "Raphael",
                     user.getEmail(),
-                    "password"
+                    "password",
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -383,7 +392,8 @@ class AuthControllerTest extends IntegrationTest {
             RegisterRequest payload = new RegisterRequest(
                     NAME,
                     EMAIL,
-                    PASSWORD
+                    PASSWORD,
+                    TYPE
             );
 
             MockHttpServletRequestBuilder request = post(BASE_URL + "/register")
@@ -414,7 +424,6 @@ class AuthControllerTest extends IntegrationTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(user.id()))
                     .andExpect(jsonPath("$.name").value(user.name()))
-                    .andExpect(jsonPath("$.type").value(user.type().name()))
                     .andExpect(jsonPath("$.email").value(user.email()))
                     .andExpect(jsonPath("$.token").isNotEmpty());
         }

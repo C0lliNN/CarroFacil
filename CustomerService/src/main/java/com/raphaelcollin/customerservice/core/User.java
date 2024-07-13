@@ -11,4 +11,5 @@ public class User {
     String id;
     String email;
     String token;
+    String type;
 }

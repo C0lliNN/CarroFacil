@@ -2,8 +2,6 @@ package com.raphaelcollin.employeeservice.core.service;
 
 import com.raphaelcollin.employeeservice.core.Employee;
 import com.raphaelcollin.employeeservice.core.User;
-import com.raphaelcollin.employeeservice.core.exception.EntityNotFoundException;
-import com.raphaelcollin.employeeservice.core.service.request.LoginRequest;
 import com.raphaelcollin.employeeservice.core.service.request.RegisterRequest;
 import com.raphaelcollin.employeeservice.core.service.response.EmployeeResponse;
 import lombok.AllArgsConstructor;
@@ -24,14 +22,5 @@ public class EmployeeService {
                 .build();
 
         return EmployeeResponse.fromEmployee(employeeRepository.save(employee), user);
-    }
-
-    public EmployeeResponse login(LoginRequest request) {
-        User user = userServiceClient.login(request.email(), request.password());
-
-        Employee employee = employeeRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
-
-        return EmployeeResponse.fromEmployee(employee, user);
     }
 }

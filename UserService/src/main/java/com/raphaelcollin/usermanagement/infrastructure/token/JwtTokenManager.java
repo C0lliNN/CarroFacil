@@ -28,7 +28,6 @@ public class JwtTokenManager implements TokenManager {
 
         claims.put("id", user.getId());
         claims.put("name", user.getName());
-        claims.put("type", user.getType().name());
         claims.put("email", user.getEmail());
 
         return Jwts
@@ -61,7 +60,6 @@ public class JwtTokenManager implements TokenManager {
         return User.builder().
                 id(id).
                 name(name).
-                type(User.Type.valueOf(type)).
                 email(email).
                 build();
     }

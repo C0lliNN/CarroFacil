@@ -20,10 +20,9 @@ class DynamoDBUserRepositoryTest extends IntegrationTest {
         void whenUserExists_shouldReturnUser() {
             User user = User.builder()
                     .name("name")
-                    .type(User.Type.CUSTOMER)
                     .email("email")
                     .password("password")
-                    .bookingsCount(5)
+                    .type("CUSTOMER")
                     .build();
 
             dynamoDBUserRepository.save(user);
@@ -32,10 +31,8 @@ class DynamoDBUserRepositoryTest extends IntegrationTest {
 
             assertTrue(result.isPresent());
             assertEquals(user.getName(), result.get().getName());
-            assertEquals(user.getType(), result.get().getType());
             assertEquals(user.getEmail(), result.get().getEmail());
             assertEquals(user.getPassword(), result.get().getPassword());
-            assertEquals(user.getBookingsCount(), result.get().getBookingsCount());
         }
 
         @Test
@@ -52,10 +49,9 @@ class DynamoDBUserRepositoryTest extends IntegrationTest {
         void whenUserExists_shouldReturnUser() {
             User user = User.builder()
                     .name("name")
-                    .type(User.Type.CUSTOMER)
                     .email("email")
                     .password("password")
-                    .bookingsCount(5)
+                    .type("CUSTOMER")
                     .build();
 
             dynamoDBUserRepository.save(user);
@@ -64,10 +60,8 @@ class DynamoDBUserRepositoryTest extends IntegrationTest {
 
             assertTrue(result.isPresent());
             assertEquals(user.getName(), result.get().getName());
-            assertEquals(user.getType(), result.get().getType());
             assertEquals(user.getEmail(), result.get().getEmail());
             assertEquals(user.getPassword(), result.get().getPassword());
-            assertEquals(user.getBookingsCount(), result.get().getBookingsCount());
         }
 
         @Test

@@ -11,4 +11,5 @@ public record LoginRequest(
 
         @NotBlank(message = "the field is mandatory")
         String password) {
+
 }

@@ -17,14 +17,17 @@ public record RegisterRequest(
 
         @NotBlank(message = "the field is mandatory")
         @Size(min = 6, max = 20, message = "the field must contain between {min} and {max} chars")
-        String password) {
+        String password,
+
+        @NotBlank(message = "the field is mandatory")
+        String type) {
 
     public User toUser() {
         return User.builder()
                 .name(name)
                 .email(email)
-                .type(User.Type.CUSTOMER)
                 .password(password)
+                .type(type)
                 .build();
     }
 }
