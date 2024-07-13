@@ -2,7 +2,6 @@ package com.raphaelcollin.customerservice.infrastructure.queue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.raphaelcollin.customerservice.core.service.CustomerService;
-import com.raphaelcollin.usermanagement.core.BookingsCounter;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
