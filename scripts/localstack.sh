@@ -1,12 +1,37 @@
+# Users table
+
 awslocal dynamodb create-table --table-name users \
   --attribute-definitions AttributeName=id,AttributeType=S\
   --key-schema AttributeName=id,KeyType=HASH \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 
-# Create secondary index for email
 awslocal dynamodb update-table --table-name users \
   --attribute-definitions AttributeName=email,AttributeType=S \
   --global-secondary-index-updates '[{"Create": {"IndexName": "emailIndex", "KeySchema": [{"AttributeName": "email", "KeyType": "HASH"}], "Projection": {"ProjectionType": "ALL"}, "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}}}]'
+
+# Customers Table
+
+awslocal dynamodb create-table --table-name customers \
+  --attribute-definitions AttributeName=id,AttributeType=S\
+  --key-schema AttributeName=id,KeyType=HASH \
+  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+awslocal dynamodb update-table --table-name customers \
+  --attribute-definitions AttributeName=user_id,AttributeType=S \
+  --global-secondary-index-updates '[{"Create": {"IndexName": "userIdIndex", "KeySchema": [{"AttributeName": "user_id", "KeyType": "HASH"}], "Projection": {"ProjectionType": "ALL"}, "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}}}]'
+
+# Employees Table
+
+awslocal dynamodb create-table --table-name employees \
+  --attribute-definitions AttributeName=id,AttributeType=S\
+  --key-schema AttributeName=id,KeyType=HASH \
+  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+awslocal dynamodb update-table --table-name employees \
+  --attribute-definitions AttributeName=user_id,AttributeType=S \
+  --global-secondary-index-updates '[{"Create": {"IndexName": "userIdIndex", "KeySchema": [{"AttributeName": "user_id", "KeyType": "HASH"}], "Projection": {"ProjectionType": "ALL"}, "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}}}]'
+
+
 
 # Create a user
 awslocal dynamodb put-item --table-name users --item \
