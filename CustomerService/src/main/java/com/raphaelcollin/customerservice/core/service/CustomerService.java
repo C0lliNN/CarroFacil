@@ -34,4 +34,12 @@ public class CustomerService {
 
         return CustomerResponse.fromCustomer(customer, user);
     }
+
+    public void incrementBookingsCount(String userId) {
+        Customer customer = customerRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        customer.incrementBookingsCount();
+        customerRepository.save(customer);
+    }
 }
