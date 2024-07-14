@@ -15,13 +15,13 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
 public class BasicSimulation extends Simulation {
-    private final String AUTH_BASE_URL = "http://user-management-alb-1338286536.us-east-1.elb.amazonaws.com/auth";
-    private final String INVENTORY_BASE_URL = "http://inventory-management-alb-849344746.us-east-1.elb.amazonaws.com";
-    private final String BOOKING_BASE_URL = "http://booking-service-alb-1157582990.us-east-1.elb.amazonaws.com";
-    private final String EMPLOYEE_TOKEN = "token";
+    private final String CUSTOMER_BASE_URL = "http://localhost:8084";
+    private final String INVENTORY_BASE_URL = "http://localhost:8081";
+    private final String BOOKING_BASE_URL = "http://localhost:8082";
+    private final String EMPLOYEE_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiUmFwaGFlbCBDb2xsaW4iLCJpZCI6IjU3YjI2NTliLTEwZGMtNGU3Yy1hZDNkLThlYjI0ODRlMjRiOSIsInR5cGUiOiJFTVBMT1lFRSIsImVtYWlsIjoidGVzMTBAdGVzdC5jb20iLCJpYXQiOjE3MjA5NjY3MzYsImV4cCI6MTcyMTA1MzEzNn0.8ewk5wxvlsqly7Pf391vp6vQVAJLihrV9yZRITjDz33BOcCUzeS1CsYPIvrqUCbu5fSNfNMq53Y4BcDqJjmAqw";
 
-    private final int NUM_USERS = 100;
-    private final int RAMP_UP_TIME = 30;
+    private final int NUM_USERS = 4;
+    private final int RAMP_UP_TIME = 1;
 
     Faker faker = new Faker();
 
@@ -51,11 +51,11 @@ public class BasicSimulation extends Simulation {
     ScenarioBuilder registerScenario = scenario("register")
             .feed(feeder)
             .exec(
-                    http("Register")
-                            .post(AUTH_BASE_URL + "/register")
+                    http("Register Customer")
+                            .post(CUSTOMER_BASE_URL + "/register")
                             .header("Content-Type", "application/json")
                             .body(StringBody("{\"name\": \"#{name}\", \"email\": \"#{email}\", \"password\": \"#{password}\"}"))
-                            .check(status().is(201))
+                            .check(status().is(200))
                             .check(jsonPath("$.token").saveAs("token")))
             .exec(http("Create Vehicle")
                     .put(INVENTORY_BASE_URL + "/vehicles")
