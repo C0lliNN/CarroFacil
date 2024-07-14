@@ -2,6 +2,14 @@ output "users_table" {
   value = aws_dynamodb_table.usermanagement_table.name
 }
 
+output "customers_table" {
+  value = aws_dynamodb_table.customers_table.name
+}
+
+output "employees_table" {
+  value = aws_dynamodb_table.employees_table.name
+}
+
 output "inventory_management_db_endpoint" {
   value = aws_db_instance.inventory_management_db.endpoint
 }

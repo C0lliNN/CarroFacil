@@ -57,6 +57,11 @@ module "ecs" {
   employee_email                      = var.employee_email
   employee_password                   = var.employee_password
   aws_sns_topic_bookings              = module.messaging.bookings_topic
+  jwt_duration                        = var.jwt_duration
+  customer_service_db_table_name      = module.database.customers_table
+  customer_service_log_group_name     = module.cloudwatch.customer_log_group_name
+  employee_service_db_table_name      = module.database.employees_table
+  employee_service_log_group_name     = module.cloudwatch.employee_log_group_name
 }
 
 

@@ -41,7 +41,7 @@ resource "aws_ecs_task_definition" "inventory_management_task" {
         },
         {
           name  = "AUTH_AUTHORIZATIONSERVER_URL"
-          value = "http://${module.user_management_alb.alb_dns_name}/auth/validate"
+          value = "http://${module.user_management_alb.alb_dns_name}/validate"
         }
       ]
 

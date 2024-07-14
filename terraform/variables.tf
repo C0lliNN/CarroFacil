@@ -10,6 +10,10 @@ variable "jwt_secret" {
     description = "The secret for the JWT token"
 }
 
+variable "jwt_duration" {
+    description = "The duration of the JWT token"
+}
+
 variable "employee_email" {
     description = "The email of the employee"
 }

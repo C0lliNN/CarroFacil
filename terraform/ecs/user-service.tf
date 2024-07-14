@@ -40,10 +40,6 @@ resource "aws_ecs_task_definition" "user_management_task" {
           value = "us-east-1"
         },
         {
-          name  = "AWS_QUEUES_BOOKINGS"
-          value = var.aws_queues_bookings
-        },
-        {
           name  = "SPRING_DOCKER_COMPOSE_ENABLED"
           value = "false"
         },
@@ -52,12 +48,8 @@ resource "aws_ecs_task_definition" "user_management_task" {
           value = var.jwt_secret
         },
         {
-          name  = "EMPLOYEE_EMAIL"
-          value = var.employee_email
-        },
-        {
-          name  = "EMPLOYEE_PASSWORD"
-          value = var.employee_password
+          name = "JWT_DURATION"
+          value = var.jwt_duration
         }
       ]
 

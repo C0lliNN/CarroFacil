@@ -39,3 +39,13 @@ variable "employee_email" {}
 variable "employee_password" {}
 
 variable "aws_sns_topic_bookings" {}
+
+variable "jwt_duration" {}
+
+variable "customer_service_db_table_name" {}
+
+variable "customer_service_log_group_name" {}
+
+variable "employee_service_db_table_name" {}
+
+variable "employee_service_log_group_name" {}
